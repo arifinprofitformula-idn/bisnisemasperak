@@ -97,62 +97,101 @@ if (isset($_GET['detil']) && is_numeric($_GET['detil'])) {
             echo '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Error!</strong> Nominal Proses Bayar harus sama dengan total pending bersih: '.number_format($expectedNet).'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
         } elseif ($sumGross > 0) {
             $allowed = $sumGross;
-            
             $now = date('Y-m-d H:i:s');
-            // Ensure epi_commission_payout_log has proper ENUMs for status columns
-            $colOld = db_row("SHOW COLUMNS FROM `epi_commission_payout_log` LIKE 'old_status'");
-            if (is_array($colOld) && isset($colOld['Type'])) {
-              $t = strtolower($colOld['Type']);
-              if (strpos($t, "enum(") === false || strpos($t, "'requested'") === false || strpos($t, "'pending'") === false || strpos($t, "'processed'") === false || strpos($t, "'paid'") === false) {
-                db_query("ALTER TABLE `epi_commission_payout_log` MODIFY `old_status` ENUM('requested','pending','processed','paid') NOT NULL");
-              }
-            }
-            $colNew = db_row("SHOW COLUMNS FROM `epi_commission_payout_log` LIKE 'new_status'");
-            if (is_array($colNew) && isset($colNew['Type'])) {
-              $t2 = strtolower($colNew['Type']);
-              if (strpos($t2, "enum(") === false || strpos($t2, "'requested'") === false || strpos($t2, "'pending'") === false || strpos($t2, "'processed'") === false || strpos($t2, "'paid'") === false) {
-                db_query("ALTER TABLE `epi_commission_payout_log` MODIFY `new_status` ENUM('requested','pending','processed','paid') NOT NULL");
-              }
-            }
-            $taxTotal = (int)round($allowed * ($pph/100.0));
-            $netTotal = max(0, $allowed - $taxTotal);
-            $cek = db_insert("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`) VALUES 
-              (0,".$ids.",'".$now."',0,".$netTotal.",".$lapCode.",'Pencairan Komisi'),
-              (0,".$ids.",'".$now."',0,".$taxTotal.",".$lapCode.",'Potongan PPh21'),
-              (".$ids.",0,'".$now."',0,".$netTotal.",1,'Pencairan Komisi'),
-              (".$ids.",0,'".$now."',".$taxTotal.",0,1,'Potongan PPh21 Ditahan')");
+
+            // START TRANSACTION to prevent race conditions
+            db_query("START TRANSACTION");
+            $ok = true;
+            $totalNetPaid = 0;
+            $totalTaxPaid = 0;
             $remain = $allowed;
+            
             if (is_array($pendingRows)) {
                 foreach ($pendingRows as $pr) {
                     if ($remain <= 0) { break; }
+                    $pid = (int)$pr['id'];
                     $amt = (int)$pr['amount'];
+                    
                     if ($remain >= $amt) {
+                        // Full Payment for this request
                         $taxAmt = (int)round($amt * ($pph/100.0));
                         $netAmt = max(0, $amt - $taxAmt);
-                        db_query("UPDATE `epi_commission_payout` SET `status`='paid',`paid_at`='".$now."',`paid_by`=".$datamember['mem_id'].",`gross_amount`=".$amt.",`tax_percent`=".number_format($pph,2,'.','').",`tax_amount`=".$taxAmt.",`net_amount`=".$netAmt." WHERE `id`=".(int)$pr['id']);
+                        
+                        $u = db_query("UPDATE `epi_commission_payout` SET `status`='paid',`paid_at`='".$now."',`paid_by`=".$datamember['mem_id'].",`gross_amount`=".$amt.",`tax_percent`=".number_format($pph,2,'.','').",`tax_amount`=".$taxAmt.",`net_amount`=".$netAmt." WHERE `id`=".$pid);
+                        if (!$u) { $ok = false; break; }
+                        
                         $oldSt = isset($pr['status']) ? strtolower(trim((string)$pr['status'])) : 'pending';
                         $allowedSt = array('requested','pending','processed','paid');
                         if (!in_array($oldSt, $allowedSt, true)) { $oldSt = 'pending'; }
-                        db_query("INSERT INTO `epi_commission_payout_log` (`payout_id`,`admin_id`,`old_status`,`new_status`,`note`) VALUES (".(int)$pr['id'].",".(int)$datamember['mem_id'].",'".cek($oldSt)."','paid','gross=".$amt.",tax=".$taxAmt.",net=".$netAmt."')");
+                        db_query("INSERT INTO `epi_commission_payout_log` (`payout_id`,`admin_id`,`old_status`,`new_status`,`note`) VALUES (".$pid.",".(int)$datamember['mem_id'].",'".cek($oldSt)."','paid','gross=".$amt.",tax=".$taxAmt.",net=".$netAmt."')");
+                        
+                        // Ledger Entry (Debit)
+                        $refPay = "PAYOUT-".$pid;
+                        $refTax = "TAX-".$pid;
+                        
+                        // Debit Net
+                        $ins1 = db_query("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_reference`,`payout_id`) VALUES (0,".$ids.",'".$now."',0,".$netAmt.",".$lapCode.",'Pencairan Komisi #".$pid."','".$refPay."',".$pid.")");
+                        if (!$ins1) { $ok = false; break; }
+                        
+                        // Debit Tax
+                        if ($taxAmt > 0) {
+                            $ins2 = db_query("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_reference`,`payout_id`) VALUES (0,".$ids.",'".$now."',0,".$taxAmt.",".$lapCode.",'Potongan PPh21 #".$pid."','".$refTax."',".$pid.")");
+                            // Credit Tax to Admin
+                            db_query("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_reference`,`payout_id`) VALUES (".$ids.",0,'".$now."',".$taxAmt.",0,1,'Potongan PPh21 Ditahan #".$pid."','".$refTax."',".$pid.")");
+                            if (!$ins2) { $ok = false; break; }
+                        }
+                        
+                        $totalNetPaid += $netAmt;
+                        $totalTaxPaid += $taxAmt;
                         $remain -= $amt;
+                        
                     } else {
-                        $newAmt = $amt - $remain;
-                        db_query("UPDATE `epi_commission_payout` SET `amount`=".$newAmt.",`status`='pending',`created_at`='".$now."' WHERE `id`=".(int)$pr['id']);
+                        // Partial Payment (Split Request)
+                        $payAmt = $remain;
+                        $pendingAmt = $amt - $remain;
+                        
+                        $taxAmt = (int)round($payAmt * ($pph/100.0));
+                        $netAmt = max(0, $payAmt - $taxAmt);
+                        
+                        // Update current to Paid (Partial)
+                        $u = db_query("UPDATE `epi_commission_payout` SET `amount`=".$payAmt.",`status`='paid',`paid_at`='".$now."',`paid_by`=".$datamember['mem_id'].",`gross_amount`=".$payAmt.",`tax_percent`=".number_format($pph,2,'.','').",`tax_amount`=".$taxAmt.",`net_amount`=".$netAmt." WHERE `id`=".$pid);
+                        if (!$u) { $ok = false; break; }
+                        
+                        // Create new Pending for remainder
+                        db_query("INSERT INTO `epi_commission_payout` (`lap_id`,`order_id`,`receiver_id`,`type`,`amount`,`status`,`created_at`) VALUES (NULL, NULL, ".$ids.", '".cek($pType)."', ".$pendingAmt.", 'pending', '".$now."')");
+                        
+                        $refPay = "PAYOUT-".$pid."-PARTIAL";
+                        $refTax = "TAX-".$pid."-PARTIAL";
+                        
+                        $ins1 = db_query("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_reference`,`payout_id`) VALUES (0,".$ids.",'".$now."',0,".$netAmt.",".$lapCode.",'Pencairan Komisi (Partial) #".$pid."','".$refPay."',".$pid.")");
+                        if (!$ins1) { $ok = false; break; }
+
+                        if ($taxAmt > 0) {
+                             db_query("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_reference`,`payout_id`) VALUES (0,".$ids.",'".$now."',0,".$taxAmt.",".$lapCode.",'Potongan PPh21 (Partial) #".$pid."','".$refTax."',".$pid.")");
+                             db_query("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_reference`,`payout_id`) VALUES (".$ids.",0,'".$now."',".$taxAmt.",0,1,'Potongan PPh21 Ditahan #".$pid."','".$refTax."',".$pid.")");
+                        }
+                        
+                        $totalNetPaid += $netAmt;
+                        $totalTaxPaid += $taxAmt;
                         $remain = 0;
                     }
                 }
             }
-            $remainingPending = (int)db_var("SELECT COALESCE(SUM(`amount`),0) FROM `epi_commission_payout` WHERE `receiver_id`=".$ids." AND `type`='".cek($pType)."' AND `status` IN ('requested','pending','processed')");
-            $datalain = array('komisi' => number_format($allowed), 'pph21' => number_format($taxTotal), 'net' => number_format($netTotal));
-            sa_notif('cair_komisi',$ids,$datalain);
-            if ($cek === false) {
-                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Error!</strong> '.db_error().'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+            
+            if ($ok) {
+                db_query("COMMIT");
+                $remainingPending = (int)db_var("SELECT COALESCE(SUM(`amount`),0) FROM `epi_commission_payout` WHERE `receiver_id`=".$ids." AND `type`='".cek($pType)."' AND `status` IN ('requested','pending','processed')");
+                $datalain = array('komisi' => number_format($allowed), 'pph21' => number_format($totalTaxPaid), 'net' => number_format($totalNetPaid));
+                sa_notif('cair_komisi',$ids,$datalain);
+                
+                $msg = 'Pencairan Komisi berhasil. Gross: '.number_format($allowed).', PPh21: '.number_format($totalTaxPaid).', Net: '.number_format($totalNetPaid).'.';
+                if ($remainingPending === 0) { $msg .= ' Semua pending selesai.'; }
+                
+                echo '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Sukses!</strong> '.$msg.'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                echo '<script>setTimeout(function(){ var qs="?status='.( ($remainingPending===0)?'paid':$status ).'&tipe='.$tipe.'"; window.location.replace(window.location.pathname+qs); }, 1000);</script>';
             } else {
-                $msg = ($allowed < $req) ? 'Sebagian komisi diproses (dibatasi saldo/pending).' : 'Pencairan Komisi berhasil.';
-                $msg .= ' Gross: '.number_format($allowed).', PPh21 ('.number_format($pph,2).'%): '.number_format($taxTotal).', Net: '.number_format($netTotal).'.';
-                if ($remainingPending === 0) { $msg .= ' Semua transaksi pending telah dibayar.'; }
-                echo '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Ok!</strong> '.$msg.'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-                echo '<script>setTimeout(function(){ var qs="?status='.( ($remainingPending===0)?'paid':$status ).'&tipe='.$tipe.'"; window.location.replace(window.location.pathname+qs); }, 800);</script>';
+                db_query("ROLLBACK");
+                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Gagal!</strong> Terjadi kesalahan database saat memproses transaksi.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
             }
         } else {
             if ($sumPending === 0) {
@@ -202,7 +241,14 @@ if (isset($_GET['detil']) && is_numeric($_GET['detil'])) {
                 $now = date('Y-m-d H:i:s');
                 $reason = isset($_POST['alasan']) ? trim((string)$_POST['alasan']) : '';
                 $transNo = 'TX-'.(string)$rid.'-'.($pType==='contrib'?'KONTR':'SPON').'-'.date('YmdHis', strtotime($lastTs));
+                
+                // START TRANSACTION
+                db_query("START TRANSACTION");
                 $okAll = true;
+                $processedNet = 0;
+                $processedTax = 0;
+                $processedGross = 0;
+
                 // Ensure schema supports canceled status & reason columns
                 $colStatX = db_row("SHOW COLUMNS FROM `epi_commission_payout` LIKE 'status'");
                 if (is_array($colStatX) && isset($colStatX['Type'])) {
@@ -222,32 +268,54 @@ if (isset($_GET['detil']) && is_numeric($_GET['detil'])) {
                 if (is_array($colOldX) && isset($colOldX['Type'])) { $tt=strtolower($colOldX['Type']); if (strpos($tt, "enum(")!==false && strpos($tt, "'canceled'")===false) { db_query("ALTER TABLE `epi_commission_payout_log` MODIFY `old_status` ENUM('requested','pending','processed','paid','canceled','rejected') NOT NULL"); } }
                 $colNewX = db_row("SHOW COLUMNS FROM `epi_commission_payout_log` LIKE 'new_status'");
                 if (is_array($colNewX) && isset($colNewX['Type'])) { $tn=strtolower($colNewX['Type']); if (strpos($tn, "enum(")!==false && strpos($tn, "'canceled'")===false) { db_query("ALTER TABLE `epi_commission_payout_log` MODIFY `new_status` ENUM('requested','pending','processed','paid','canceled','rejected') NOT NULL"); } }
+                
                 foreach ($rows as $r) {
                     $qid = (int)$r['id'];
+                    $amt = (int)($r['gross_amount'] ?? $r['amount']);
+                    $taxAmt = isset($r['tax_amount']) && is_numeric($r['tax_amount']) ? (int)$r['tax_amount'] : (int)round($amt*($pph/100.0));
+                    $netAmt = isset($r['net_amount']) && is_numeric($r['net_amount']) ? (int)$r['net_amount'] : max(0, $amt - $taxAmt);
+                    
                     $u = db_query("UPDATE `epi_commission_payout` SET `status`='canceled',`canceled_at`='".cek($now)."',`cancel_reason`='".cek($reason)."',`paid_at`=NULL,`paid_by`=NULL,`gross_amount`=NULL,`tax_percent`=NULL,`tax_amount`=NULL,`net_amount`=NULL WHERE `id`=".$qid);
                     if ($u === false) { $okAll = false; break; }
+                    
                     db_query("INSERT INTO `epi_commission_payout_log` (`payout_id`,`admin_id`,`old_status`,`new_status`,`note`) VALUES (".$qid.",".(int)$datamember['mem_id'].",'paid','canceled','cancel ts=".cek($lastTs)." reason=".cek($reason)."')");
+                    
+                    // Reversal Ledger (Credit) linked to Payout ID
+                    $refRefund = "REFUND-PAYOUT-".$qid;
+                    $refTaxRefund = "REFUND-TAX-".$qid;
+                    
+                    // Refund Net
+                    $ins1 = db_query("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_reference`,`payout_id`) VALUES (0,".$rid.",'".$now."',".$netAmt.",0,".$lapCode.",'Pembatalan Pencairan Komisi #".$qid."','".$refRefund."',".$qid.")");
+                    if (!$ins1) { $okAll = false; break; }
+                    
+                    // Refund Tax
+                    if ($taxAmt > 0) {
+                        $ins2 = db_query("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_reference`,`payout_id`) VALUES (0,".$rid.",'".$now."',".$taxAmt.",0,".$lapCode.",'Pembatalan Potongan PPh21 #".$qid."','".$refTaxRefund."',".$qid.")");
+                         // Reverse Admin Credit (Debit Admin) - Actually we usually just ignore admin side or debit it. 
+                         // To balance admin books: Debit Admin (lap_keluar)
+                         db_query("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_reference`,`payout_id`) VALUES (".$rid.",0,'".$now."',0,".$taxAmt.",1,'Pembatalan PPh21 Ditahan #".$qid."','".$refTaxRefund."',".$qid.")");
+                        if (!$ins2) { $okAll = false; break; }
+                    }
+                    
+                    $processedNet += $netAmt;
+                    $processedTax += $taxAmt;
+                    $processedGross += $amt;
                 }
+                
                 if (!$okAll) {
+                    db_query("ROLLBACK");
                     echo '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Error!</strong> Gagal memperbarui status pembayaran. '.htmlspecialchars((string)db_error()).'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
                 } else {
-                    $cek = db_insert("INSERT INTO `sa_laporan` (`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`) VALUES 
-                      (0,".$rid.",'".$now."',".$sumNet.",0,".$lapCode.",'Pembatalan Pencairan Komisi'),
-                      (0,".$rid.",'".$now."',".$sumTax.",0,".$lapCode.",'Pembatalan Potongan PPh21'),
-                      (".$rid.",0,'".$now."',".$sumNet.",0,1,'Pembatalan Pencairan Komisi'),
-                      (".$rid.",0,'".$now."',0,".$sumTax.",1,'Pembatalan PPh21 Ditahan')");
-                    if ($cek === false) {
-                        echo '<div class="alert alert-warning alert-dismissible fade show" role="alert"><strong>Perhatian!</strong> Status dibatalkan, namun gagal menulis reversal ledger. '.htmlspecialchars((string)db_error()).'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-                    } else {
-                        $adminWa = isset($datamember['mem_whatsapp']) ? formatwa($datamember['mem_whatsapp']) : (isset($settings['whatsapp']) ? formatwa($settings['whatsapp']) : '');
-                        db_query("INSERT INTO `epi_admin_finance_log` (`action`,`admin_wa`,`changed_by`,`info`,`ip`) VALUES ('cancel_payout','".cek($adminWa)."',".(int)$datamember['mem_id'].",'rid=".$rid.",type=".cek($pType).",ts=".cek($lastTs).",rows=".count($rows).",net=".$sumNet.",reason=".cek($reason).",transno=".cek($transNo)."','".cek(realIP())."')");
-                        // Notifikasi WA ke member & admin menggunakan template cancel_payout
-                        $helpContact = !empty($adminWa) ? $adminWa : (isset($settings['wa_admin']) ? formatwa($settings['wa_admin']) : (isset($settings['whatsapp']) ? formatwa($settings['whatsapp']) : ''));
-                        $datalain = array('transno'=>$transNo, 'alasan'=>($reason!==''?$reason:'Tidak ada'), 'help_contact'=>$helpContact);
-                        sa_notif('cancel_payout',$rid,$datalain);
-                        echo '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Ok!</strong> Pembatalan pembayaran berhasil. Gross: '.number_format($sumGross).', PPh21: '.number_format($sumTax).', Net: '.number_format($sumNet).'.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-                        echo '<script>setTimeout(function(){ var qs="?status=pending&tipe='.( $tipe ).'"; window.location.replace(window.location.pathname+qs); }, 800);</script>';
-                }
+                    db_query("COMMIT");
+                    
+                    $adminWa = isset($datamember['mem_whatsapp']) ? formatwa($datamember['mem_whatsapp']) : (isset($settings['whatsapp']) ? formatwa($settings['whatsapp']) : '');
+                    db_query("INSERT INTO `epi_admin_finance_log` (`action`,`admin_wa`,`changed_by`,`info`,`ip`) VALUES ('cancel_payout','".cek($adminWa)."',".(int)$datamember['mem_id'].",'rid=".$rid.",type=".cek($pType).",ts=".cek($lastTs).",rows=".count($rows).",net=".$processedNet.",reason=".cek($reason).",transno=".cek($transNo)."','".cek(realIP())."')");
+                    // Notifikasi WA ke member & admin menggunakan template cancel_payout
+                    $helpContact = !empty($adminWa) ? $adminWa : (isset($settings['wa_admin']) ? formatwa($settings['wa_admin']) : (isset($settings['whatsapp']) ? formatwa($settings['whatsapp']) : ''));
+                    $datalain = array('transno'=>$transNo, 'alasan'=>($reason!==''?$reason:'Tidak ada'), 'help_contact'=>$helpContact);
+                    sa_notif('cancel_payout',$rid,$datalain);
+                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Ok!</strong> Pembatalan pembayaran berhasil. Gross: '.number_format($processedGross).', PPh21: '.number_format($processedTax).', Net: '.number_format($processedNet).'.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                    echo '<script>setTimeout(function(){ var qs="?status=pending&tipe='.( $tipe ).'"; window.location.replace(window.location.pathname+qs); }, 800);</script>';
                 }
             }
         }

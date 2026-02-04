@@ -292,7 +292,7 @@ if (isset($_GET['detil'])) {
                 </div>
                 <div class="d-flex justify-content-between mb-2">
                   <span class="text-muted small">Biaya Admin</span>
-                  <span class="fw-bold text-success small">Gratis (Khusus BSI)</span>
+                  <span class="fw-bold text-success small">Gratis</span>
                 </div>
                 <div class="d-flex justify-content-between mb-2">
                   <span class="text-muted small">Pajak (PPh 21 2.5%)</span>
@@ -480,88 +480,41 @@ if (isset($_GET['detil'])) {
     if (!is_array($colRR) || !isset($colRR['Field'])) { db_query("ALTER TABLE `epi_commission_payout` ADD `reject_reason` VARCHAR(255) NULL"); }
     $colCR = db_row("SHOW COLUMNS FROM `epi_commission_payout` LIKE 'cancel_reason'");
     if (!is_array($colCR) || !isset($colCR['Field'])) { db_query("ALTER TABLE `epi_commission_payout` ADD `cancel_reason` VARCHAR(255) NULL"); }
-    $colCA = db_row("SHOW COLUMNS FROM `epi_commission_payout` LIKE 'canceled_at'");
-    if (!is_array($colCA) || !isset($colCA['Field'])) { db_query("ALTER TABLE `epi_commission_payout` ADD `canceled_at` DATETIME NULL"); }
-    
-    // Tampilkan tabel riwayat withdraw
-    $hist = db_select("SELECT p.*, m.mem_nama 
-      FROM `epi_commission_payout` p 
-      LEFT JOIN `sa_member` m ON m.mem_id=p.receiver_id 
-      WHERE p.`receiver_id`=".$iduser.$whereType." 
-      ORDER BY p.`created_at` DESC LIMIT 20");
-      
-    if (!empty($hist)) {
-      echo '<div class="epi-card mt-3">';
-      echo '<div class="epi-label">📄 Riwayat Pencairan (Terakhir 20)</div>';
+
+    // Query untuk mengambil riwayat pencairan
+    $history = db_select("SELECT p.* FROM `epi_commission_payout` p WHERE p.`receiver_id`=".$iduser.$whereType." ORDER BY p.`created_at` DESC LIMIT 20");
+    if(count($history) > 0){
+      echo '<div class="epi-card mt-4">';
+      echo '<div class="epi-label mb-3"><i class="fas fa-history text-muted"></i> Riwayat Pencairan (Terakhir 20)</div>';
       echo '<div class="table-responsive">';
-      echo '<table class="table table-hover table-sm">';
-      echo '<thead class="table-light"><tr><th>Tanggal</th><th>Tipe</th><th>Jumlah</th><th>Status</th><th>Info</th></tr></thead>';
+      echo '<table class="table table-hover table-striped align-middle">';
+      echo '<thead class="table-light"><tr><th>Tanggal</th><th>Tipe</th><th>Jumlah</th><th>Status</th><th>Keterangan</th></tr></thead>';
       echo '<tbody>';
-      foreach ($hist as $h) {
+      foreach($history as $h){
         $st = $h['status'];
-        $badge = 'bg-secondary';
-        if($st=='requested') $badge='bg-primary';
-        if($st=='pending') $badge='bg-info text-dark';
-        if($st=='processed') $badge='bg-warning text-dark';
-        if($st=='paid') $badge='bg-success';
-        if($st=='rejected' || $st=='canceled') $badge='bg-danger';
+        $badge = 'secondary';
+        if($st=='requested') $badge='info';
+        elseif($st=='pending') $badge='warning';
+        elseif($st=='processed') $badge='primary';
+        elseif($st=='paid') $badge='success';
+        elseif($st=='rejected' || $st=='cancelled') $badge='danger';
         
-        $info = '-';
-        if ($st=='rejected' && !empty($h['reject_reason'])) $info = '<small class="text-danger">'.$h['reject_reason'].'</small>';
-        if ($st=='canceled' && !empty($h['cancel_reason'])) $info = '<small class="text-danger">'.$h['cancel_reason'].'</small>';
+        $ket = '-';
+        if($st=='rejected' && !empty($h['reject_reason'])) $ket = '<span class="text-danger small">'.$h['reject_reason'].'</span>';
+        elseif($st=='cancelled' && !empty($h['cancel_reason'])) $ket = '<span class="text-danger small">'.$h['cancel_reason'].'</span>';
+        elseif($st=='paid') $ket = '<span class="text-success small"><i class="fas fa-check-circle"></i> Selesai</span>';
         
         echo '<tr>';
-        echo '<td>'.date('d/m/y H:i', strtotime($h['created_at'])).'</td>';
+        echo '<td>'.date('d M Y H:i', strtotime($h['created_at'])).'</td>';
         echo '<td>'.ucfirst($h['type']).'</td>';
-        echo '<td>'.number_format($h['amount']).'</td>';
-        echo '<td><span class="badge '.$badge.'">'.ucfirst($st).'</span></td>';
-        echo '<td>'.$info.'</td>';
+        echo '<td class="fw-bold">Rp '.number_format($h['amount']).'</td>';
+        echo '<td><span class="badge bg-'.$badge.'">'.ucfirst($st).'</span></td>';
+        echo '<td>'.$ket.'</td>';
         echo '</tr>';
       }
       echo '</tbody></table>';
       echo '</div></div>';
     }
-    
-    echo '
-    <div class="mt-4">
-      <h5>Riwayat Komisi Bulanan</h5>
-      <div class="table-responsive">
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th>Bulan</th>
-            <th class="text-end">Total Komisi Bersih</th>
-            <th class="text-center">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>';
 
-	if (count($data) > 0) {
-		foreach ($bulan_list as $bulan) {
-		    // Cek apakah bulan ini ada datanya
-		    $komisi = isset($duit[$bulan]['komisi']) ? $duit[$bulan]['komisi'] : 0;
-        // Skip jika 0
-        if ($komisi == 0) continue;
-
-		    echo '
-		    <tr>
-		        <td>' . date('F Y', strtotime($bulan . '-01')) . '</td>
-		        <td class="text-end">Rp ' . number_format($komisi, 0, ',', '.') . '</td>
-		        <td class="text-center">
-		            <a href="?detil=' . $bulan . '" class="btn btn-sm btn-primary">
-		                <i class="fa fa-eye"></i> Detail
-		            </a>
-		        </td>
-		    </tr>';
-		}
-	} else {
-		echo '<tr><td colspan="3" class="text-center">Belum ada data komisi.</td></tr>';
-	}
-
-	echo '
-        </tbody>
-      </table>
-      </div>
-    </div>';
 }
 ?>
