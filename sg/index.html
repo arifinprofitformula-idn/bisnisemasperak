@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silvergram - Aset Perak Murni yang Mudah Dimiliki, Mudah Dicairkan</title>
+    <meta name="description" content="100% Fine Silver dengan Buyback & Gadai Guarantee, didukung Financial Provider tepercaya. Mulai bangun portofolio perak yang likuid, aman, dan bernilai.">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Silvergram - Aset Perak Murni yang Mudah Dimiliki, Mudah Dicairkan">
+    <meta property="og:description" content="100% Fine Silver dengan Buyback & Gadai Guarantee, didukung Financial Provider tepercaya.">
+    <meta property="og:type" content="website">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Blue Color Palette - Inspired by Reference Image */
+            --primary-blue: #1E3A8A;
+            --secondary-blue: #3B82F6;
+            --accent-blue: #60A5FA;
+            --light-blue: #DBEAFE;
+            --extra-light-blue: #EFF6FF;
+            
+            /* Silver/White Accents - Refined Palette */
+            --silver-primary: #F8FAFC;
+            --silver-secondary: #E2E8F0;
+            --silver-accent: #CBD5E1;
+            --silver-dark: #94A3B8;
+            --silver-metallic: #E5E7EB;
+            --silver-bright: #F1F5F9;
+            --silver-shadow: rgba(148, 163, 184, 0.4);
+            
+            /* Silver Button Variants */
+            --silver-button-primary: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 50%, #CBD5E1 100%);
+            --silver-button-secondary: linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 50%, #94A3B8 100%);
+            --silver-button-accent: linear-gradient(135deg, #F1F5F9 0%, #E5E7EB 50%, #D1D5DB 100%);
+            --silver-shimmer: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 50%, var(--accent-blue) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary-blue) 0%, var(--accent-blue) 100%);
+            --gradient-silver: linear-gradient(135deg, var(--silver-primary) 0%, var(--silver-secondary) 100%);
+            
+            /* Background Gradients */
+            --bg-primary: linear-gradient(135deg, #0F172A 0%, var(--primary-blue) 50%, #1E293B 100%);
+            --bg-secondary: linear-gradient(135deg, var(--primary-blue) 0%, #1E293B 100%);
+            --bg-card: linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            
+            /* Text Colors */
+            --text-primary: var(--silver-primary);
+            --text-secondary: var(--silver-secondary);
+            --text-accent: var(--silver-accent);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        /* Geometric Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, transparent 30%, rgba(96, 165, 250, 0.03) 50%, transparent 70%),
+                radial-gradient(circle at 20% 80%, rgba(30, 58, 138, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+        
+        @keyframes backgroundShift {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(-10px) translateY(-5px); }
+            50% { transform: translateX(10px) translateY(5px); }
+            75% { transform: translateX(-5px) translateY(10px); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: var(--gradient-primary);
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(248, 250, 252, 0.08) 50%, transparent 70%);
+            animation: shimmer 4s ease-in-out infinite;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(96, 165, 250, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%) rotate(0deg); }
+            50% { transform: translateX(100%) rotate(1deg); }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            backdrop-filter: blur(1px);
+            background: rgba(248, 250, 252, 0.02);
+            border-radius: 2rem;
+            padding: 3rem 2rem;
+            border: 1px solid rgba(248, 250, 252, 0.1);
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: var(--gradient-silver);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            filter: drop-shadow(0 2px 4px rgba(96, 165, 250, 0.3));
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .hero-guarantees {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .guarantee-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            background: var(--silver-button-secondary);
+            color: var(--primary-blue);
+            padding: 0.8rem 1.2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--silver-accent);
+            backdrop-filter: blur(15px);
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 4px 15px var(--silver-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .guarantee-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--silver-shimmer);
+            transition: left 0.5s ease;
+            opacity: 0.7;
+        }
+        
+        .guarantee-item:hover::before {
+            left: 100%;
+        }
+        
+        .guarantee-item:hover {
+            background: var(--silver-button-accent);
+            border-color: var(--silver-dark);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 
+                0 8px 25px var(--silver-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9),
+                0 0 20px rgba(248, 250, 252, 0.2);
+        }
+        
+        .guarantee-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--silver-button-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 
+                0 4px 12px var(--silver-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--silver-accent);
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: var(--silver-button-primary);
+            color: var(--primary-blue);
+            padding: 1.2rem 3rem;
+            border-radius: 1.5rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 8px 25px var(--silver-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--silver-accent);
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(30, 58, 138, 0.1);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--silver-shimmer);
+            transition: left 0.6s ease;
+            z-index: 1;
+        }
+        
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--silver-button-accent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:hover::after {
+            opacity: 1;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 
+                0 20px 50px var(--silver-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9),
+                0 0 30px rgba(248, 250, 252, 0.3);
+            color: var(--primary-blue);
+        }
+        
+        .cta-button span {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+        
+        .section:nth-child(even) {
+            background: var(--bg-secondary);
+            position: relative;
+        }
+        
+        .section:nth-child(even)::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(96, 165, 250, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(30, 58, 138, 0.08) 0%, transparent 50%);
+            z-index: 1;
+        }
+        
+        .section .container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--gradient-silver);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(59, 130, 246, 0.2));
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* Key Benefits */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .benefit-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: 2rem;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .benefit-card:hover::before {
+            opacity: 1;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(96, 165, 250, 0.4);
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.3);
+        }
+        
+        .benefit-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-secondary);
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .benefit-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .benefit-desc {
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 2;
+            line-height: 1.7;
+        }
+        
+        /* Products */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .product-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 2rem;
+            border: 1px solid rgba(96, 165, 250, 0.25);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.08) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .product-card:hover::before {
+            opacity: 1;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            border-color: rgba(96, 165, 250, 0.5);
+            box-shadow: 0 25px 50px rgba(30, 58, 138, 0.4);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--gradient-secondary);
+            color: var(--text-primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            z-index: 3;
+        }
+        
+        /* Featured Product Styling */
+        .featured-product {
+            position: relative;
+            transform: scale(1.05);
+            border: 2px solid var(--silver-accent);
+            background: linear-gradient(135deg, 
+                rgba(192, 192, 192, 0.15) 0%, 
+                rgba(169, 169, 169, 0.1) 50%, 
+                rgba(128, 128, 128, 0.05) 100%);
+            box-shadow: 
+                0 20px 40px rgba(30, 58, 138, 0.3),
+                0 0 0 1px rgba(192, 192, 192, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: featuredGlow 3s ease-in-out infinite alternate;
+        }
+        
+        .featured-product::before {
+            background: linear-gradient(135deg, 
+                rgba(192, 192, 192, 0.2) 0%, 
+                rgba(169, 169, 169, 0.15) 50%, 
+                transparent 100%);
+            opacity: 1;
+        }
+        
+        .featured-product:hover {
+            transform: translateY(-15px) scale(1.08);
+            border-color: var(--silver-primary);
+            box-shadow: 
+                0 30px 60px rgba(30, 58, 138, 0.4),
+                0 0 0 2px rgba(192, 192, 192, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .featured-badge {
+            background: var(--gradient-silver) !important;
+            color: var(--text-primary) !important;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.7rem 1.4rem;
+            box-shadow: 
+                0 6px 16px rgba(192, 192, 192, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            animation: badgeShimmer 2s ease-in-out infinite alternate;
+        }
+        
+        .featured-product .product-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient-silver);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(192, 192, 192, 0.3));
+        }
+        
+        .featured-product .benefit-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 4px 8px rgba(192, 192, 192, 0.4));
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+        
+        @keyframes featuredGlow {
+            0% {
+                box-shadow: 
+                    0 20px 40px rgba(30, 58, 138, 0.3),
+                    0 0 0 1px rgba(192, 192, 192, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            }
+            100% {
+                box-shadow: 
+                    0 25px 50px rgba(30, 58, 138, 0.4),
+                    0 0 0 2px rgba(192, 192, 192, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            }
+        }
+        
+        @keyframes badgeShimmer {
+            0% {
+                box-shadow: 
+                    0 6px 16px rgba(192, 192, 192, 0.4),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            }
+            100% {
+                box-shadow: 
+                    0 8px 20px rgba(192, 192, 192, 0.5),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            }
+        }
+        
+        @keyframes iconFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .product-weight {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-silver);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 2px 4px rgba(96, 165, 250, 0.3));
+            position: relative;
+            z-index: 2;
+        }
+        
+        .product-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .product-desc {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .product-features {
+            list-style: none;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .product-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        
+        .product-features li:hover {
+            color: var(--text-primary);
+        }
+        
+        .product-features li::before {
+            content: '✓';
+            width: 20px;
+            height: 20px;
+            background: var(--gradient-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+        
+        /* Product Image SVG */
+        .product-image-svg {
+            width: 300px;
+            height: auto;
+            max-width: 100%;
+            margin: 1.5rem auto;
+            display: block;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 2;
+            animation: productFloat 4s ease-in-out infinite;
+        }
+        
+        .product-image-svg:hover {
+            transform: scale(1.05) translateY(-5px);
+            filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.25));
+        }
+        
+        @keyframes productFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+        
+        /* Responsive adjustments for product images */
+        @media (max-width: 768px) {
+            .product-image-svg {
+                width: 100px;
+                margin: 1rem auto;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .product-image-svg {
+                width: 160px;
+                margin: 0.8rem auto;
+            }
+        }
+        
+        /* FAQ */
+        .faq-item {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(96, 165, 250, 0.25);
+            border-radius: 1.5rem;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        
+        .faq-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .faq-item:hover::before {
+            opacity: 1;
+        }
+        
+        .faq-item:hover {
+            border-color: rgba(96, 165, 250, 0.5);
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.2);
+        }
+        
+        .faq-question {
+            width: 100%;
+            padding: 2rem;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .faq-question:hover {
+            background: rgba(96, 165, 250, 0.08);
+        }
+        
+        .faq-answer {
+            padding: 0 2rem 2rem;
+            color: var(--text-secondary);
+            display: none;
+            line-height: 1.7;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--gradient-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+            background: var(--gradient-primary);
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            padding: 5rem 3rem;
+            border-radius: 2.5rem;
+            text-align: center;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(96, 165, 250, 0.1) 0%, transparent 70%);
+            z-index: 1;
+        }
+        
+        .final-cta > * {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .reasons-list {
+            margin: 2.5rem 0;
+            text-align: left;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .reason-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        
+        .reason-item:hover {
+            color: var(--text-primary);
+        }
+        
+        .reason-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--silver-button-primary);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+            box-shadow: 
+                0 4px 12px var(--silver-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--silver-accent);
+        }
+        
+        .whatsapp-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--silver-button-primary);
+            color: var(--primary-blue);
+            padding: 1.2rem 2.5rem;
+            border-radius: 1.5rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 8px 25px var(--silver-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--silver-accent);
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .whatsapp-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--silver-shimmer);
+            transition: left 0.5s ease;
+            opacity: 0.6;
+        }
+        
+        .whatsapp-button:hover::before {
+            left: 100%;
+        }
+        
+        .whatsapp-button:hover {
+            background: var(--silver-button-accent);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 15px 40px var(--silver-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9),
+                0 0 30px rgba(248, 250, 252, 0.3);
+            border-color: var(--silver-dark);
+        }
+        
+        /* Floating WhatsApp */
+        .floating-whatsapp {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating-wa-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--silver-button-primary);
+            color: var(--primary-blue);
+            padding: 1rem 1.5rem;
+            border-radius: 3rem;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 
+                0 8px 25px var(--silver-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--silver-accent);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .floating-wa-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--silver-shimmer);
+            transition: left 0.5s ease;
+            opacity: 0.6;
+        }
+        
+        .floating-wa-btn:hover::before {
+            left: 100%;
+        }
+        
+        .floating-wa-btn:hover {
+            background: var(--silver-button-accent);
+            transform: scale(1.15);
+            box-shadow: 
+                0 12px 35px var(--silver-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9),
+                0 0 25px rgba(248, 250, 252, 0.3);
+            border-color: var(--silver-dark);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 5rem 1.5rem;
+                min-height: 90vh;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+                line-height: 1.2;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 2.5rem;
+            }
+            
+            .hero-guarantees {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+            
+            .guarantee-item {
+                padding: 2rem;
+            }
+            
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .benefit-card {
+                padding: 2.5rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .product-card {
+                padding: 2.5rem;
+            }
+            
+            /* Product Images Responsive */
+            .product-images-section {
+                padding: 50px 0;
+            }
+            
+            .product-images-container {
+                gap: 3rem;
+                padding: 0 2rem;
+            }
+            
+            .product-image {
+                width: 240px;
+            }
+            
+            .final-cta {
+                padding: 4rem 2rem;
+                border-radius: 2rem;
+            }
+            
+            .reasons-list {
+                max-width: 100%;
+            }
+            
+            .reason-item {
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .reason-icon {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .whatsapp-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+            
+            .floating-whatsapp {
+                bottom: 1.5rem;
+                right: 1.5rem;
+            }
+            
+            .floating-wa-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.3rem;
+                padding: 0.8rem;
+                border-radius: 50%;
+            }
+            
+            .floating-wa-btn span {
+                display: none;
+            }
+            
+            .faq-question {
+                padding: 1.5rem;
+                font-size: 1rem;
+            }
+            
+            .faq-answer {
+                padding: 0 1.5rem 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                padding: 4rem 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .guarantee-item,
+            .benefit-card,
+            .product-card {
+                padding: 2rem;
+            }
+            
+            /* Product Images Mobile */
+            .product-images-section {
+                padding: 40px 0;
+            }
+            
+            .product-images-container {
+                flex-direction: column;
+                gap: 2rem;
+                padding: 0 1rem;
+            }
+            
+            .product-image-wrapper:first-child {
+                transform: rotate(-5deg);
+            }
+            
+            .product-image-wrapper:last-child {
+                transform: rotate(5deg);
+            }
+            
+            .product-image {
+                width: 200px;
+            }
+            
+            .product-image-wrapper:hover {
+                transform: scale(1.03) rotate(-5deg);
+            }
+            
+            .product-image-wrapper:last-child:hover {
+                transform: scale(1.03) rotate(5deg);
+            }
+            
+            .final-cta {
+                padding: 3rem 1.5rem;
+            }
+            
+            .section {
+                padding: 3rem 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .floating-wa-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* Scroll Progress Indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(30, 58, 138, 0.1);
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .scroll-progress {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            position: relative;
+        }
+        
+        .scroll-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3));
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        /* Hero Scroll Indicator */
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #BFC4CA;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+        /* TV Video Embed Styles */
+        .tv-card { 
+            margin: 1.5rem auto 2rem; 
+            max-width: 900px; 
+            padding: 0 0.5rem; 
+        }
+        .hero-content .tv-card { width: 100%; }
+        .tv-frame { 
+            position: relative; 
+            width: 100%; 
+            border-radius: 1.2rem; 
+            background: #0a0a0a; 
+            border: 2px solid rgba(192, 192, 192, 0.3); 
+            box-shadow: 0 12px 30px rgba(30, 58, 138, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08); 
+            padding: 0.8rem; 
+        }
+        .tv-screen { 
+            position: relative; 
+            border-radius: 0.8rem; 
+            overflow: hidden; 
+            background: #000; 
+            aspect-ratio: 16 / 9; 
+        }
+        .video-embed { 
+            width: 100%; 
+            height: 100%; 
+            border: 0; 
+        }
+        .tv-frame::before { 
+            content: ''; 
+            position: absolute; 
+            top: -10px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 120px; 
+            height: 6px; 
+            border-radius: 3px; 
+            background: linear-gradient(135deg, #F8FAFC, #CBD5E1); 
+            box-shadow: 0 4px 12px rgba(148, 163, 184, 0.5); 
+            opacity: .6; 
+        }
+        .tv-stand { 
+            width: 140px; 
+            height: 10px; 
+            background: linear-gradient(135deg, #CBD5E1, #94A3B8); 
+            border-radius: 6px; 
+            margin: 10px auto 0; 
+            box-shadow: 0 6px 16px rgba(30, 58, 138, 0.3), inset 0 1px 0 rgba(255,255,255,0.6); 
+        }
+        @media (max-width: 600px) {
+            .tv-card { margin: 1rem auto 1.5rem; }
+            .tv-frame { padding: 0.6rem; border-radius: 1rem; }
+            .tv-screen { border-radius: 0.7rem; }
+            .tv-stand { width: 100px; height: 8px; }
+        }
+    </style>
+<style>
+  /* Actions button styles for product cards */
+  .product-actions { display:flex; gap:.75rem; align-items:center; margin-top:1rem; }
+  .buy-btn, .join-btn {
+    display:inline-flex; align-items:center; gap:.5rem;
+    background: var(--silver-button-primary);
+    color: var(--primary-blue);
+    padding: .7rem 1.1rem;
+    border-radius: 1rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .95rem;
+    transition: all .3s ease;
+    border: 1px solid var(--silver-accent);
+    box-shadow: 0 8px 25px var(--silver-shadow), inset 0 1px 0 rgba(255,255,255,.8);
+  }
+  .buy-btn:hover, .join-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 35px rgba(30,58,138,.35), inset 0 1px 0 rgba(255,255,255,.9);
+  }
+  .wa-icon { display:inline-flex; align-items:center; justify-content:center; color: var(--primary-blue); }
+  .wa-icon svg { display:block; }
+  /* Desktop: featured product menonjol tanpa merubah jumlah kolom grid */
+  @media (min-width: 992px) {
+    .products-grid > .product-card.featured-product { grid-column: auto; }
+  }
+</style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Silvergram</h1>
+                <p class="hero-subtitle">Aset Perak Murni yang Mudah Dimiliki, Mudah Dicairkan</p>
+                <p style="font-size: 1.2rem; color: rgba(236, 239, 241, 0.9); margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                    Fine Silver dengan Buyback & Gadai Guarantee, didukung Financial Provider tepercaya. 
+                    Mulai bangun portofolio perak yang likuid, aman, dan bernilai.
+                </p>
+                <!-- Video Silvergram: TV Framed, sandboxed to prevent redirect -->
+                <div class="tv-card" aria-label="Video Silvergram dalam frame TV">
+                    <div class="tv-frame">
+                        <div class="tv-screen">
+                            <iframe class="video-embed"
+                                title="Silvergram dari Emas Perak Indonesia"
+                                src="https://www.youtube-nocookie.com/embed/ddBSVrjGTUM?rel=0&modestbranding=1&playsinline=1&autoplay=0&controls=1"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                                referrerpolicy="no-referrer"
+                                sandbox="allow-scripts allow-same-origin allow-presentation"
+                                allowfullscreen
+                                aria-label="Pemutar video YouTube Silvergram">
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="tv-stand" aria-hidden="true"></div>
+                </div>
+                <div class="hero-guarantees">
+                    <div class="guarantee-item">
+                        <div class="guarantee-icon">✓</div>
+                        <span>Buyback & Gadai Guarantee</span>
+                    </div>
+                    <div class="guarantee-item">
+                        <div class="guarantee-icon">★</div>
+                        <span>Fine Silver 999.5</span>
+                    </div>
+                    <div class="guarantee-item">
+                        <div class="guarantee-icon">🛡</div>
+                        <span>Support Financial Provider</span>
+                    </div>
+                </div>
+                
+                <a href="#produk-terlaris" class="cta-button">Lihat Rincian</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div style="font-size: 2rem;">↓</div>
+        </div>
+    </section>
+
+    <!-- Key Benefits -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title" >Mengapa Silvergram?</h2>
+            <p class="section-subtitle">Empat keunggulan utama yang membuat Silvergram menjadi pilihan terbaik untuk investasi perak Anda</p>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">★</div>
+                    <h3 class="benefit-title">Best Fineness</h3>
+                    <p class="benefit-desc">Kandungan 100% Fine Silver sesuai standar kemurnian tertinggi</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🛡</div>
+                    <h3 class="benefit-title">Best Security</h3>
+                    <p class="benefit-desc">Nomor seri, sertifikat, dan proses verifikasi berlapis untuk keamanan maksimal</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">👥</div>
+                    <h3 class="benefit-title">Best Support System</h3>
+                    <p class="benefit-desc">Dukungan edukasi, komunitas, dan panduan pemeliharaan aset yang komprehensif</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">⚙</div>
+                    <h3 class="benefit-title">Best Management</h3>
+                    <p class="benefit-desc">Manajemen stok & layanan purna jual yang responsif dan terpercaya</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section id="produk-terlaris" class="section">
+        <div class="container">
+            <h2 class="section-title">3 Produk Terlaris</h2>
+            <p class="section-subtitle">Tanpa gimmick, penamaan reguler, fokus pada berat & kemurnian untuk investasi yang solid</p>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-badge">Premium Choice</div>
+                    <div class="product-weight">250 g</div>
+                    <img src="https://bisnisemasperak.com/sg/sg-250g.png" alt="Silvergram 250g Product" class="product-image-svg">
+                    <h3 class="product-title">Silvergram 250 g</h3>
+                    <p class="product-desc">Pilihan utama untuk nilai akumulasi cepat</p>
+                    <ul class="product-features">
+                        <li>Akumulasi nilai optimal</li>
+                        <li>Likuiditas tinggi</li>
+                        <li>ROI maksimal</li>
+                    </ul>
+                    <div class="product-actions">
+                      <a class="buy-btn" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20membeli%20produk%20silvergram%20ukuran%20250%20g.%20Bagaimana%20teknis%20saya%20membelinya%3F%20nama%20saya%3A%20...." target="_blank" rel="noopener noreferrer">
+                        <span class="wa-icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.78 11.78 0 0 0 12.01 0C5.4 0 .03 5.37.03 11.98c0 2.11.56 4.2 1.63 6.02L0 24l6.14-1.6a12.04 12.04 0 0 0 5.87 1.5h.01c6.62 0 12-5.37 12-11.98 0-3.2-1.24-6.21-3.5-8.44ZM12.01 22c-1.86 0-3.68-.5-5.27-1.45l-.38-.23-3.64.95.97-3.55-.25-.37A9.95 9.95 0 0 1 2.03 12c0-5.52 4.48-10 9.98-10 2.67 0 5.18 1.04 7.07 2.92a9.88 9.88 0 0 1 2.93 7.06c0 5.52-4.49 10-10 10Zm5.48-7.45c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.47-2.4-1.5-.88-.78-1.47-1.73-1.64-2.02-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.62-.93-2.22-.24-.58-.48-.5-.68-.5-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.78.37-.26.3-1 1-1 2.45 0 1.45 1.05 2.85 1.2 3.05.15.2 2.07 3.17 5.02 4.45.7.3 1.24.47 1.66.6.7.22 1.33.19 1.83.12.56-.08 1.77-.72 2.03-1.43.25-.7.25-1.3.17-1.43-.08-.13-.27-.2-.57-.35Z"></path></svg>
+                        </span>
+                        Beli Sekarang
+                      </a>
+                    </div>
+                </div>
+                <div class="product-card featured-product">
+                    <div class="product-badge">Balanced Option</div>
+                    <div class="product-weight">100 g</div>
+                    <img src="https://bisnisemasperak.com/sg/sg100.png" alt="Silvergram 100g Product" class="product-image-svg">
+                    <h3 class="product-title">Silvergram 100 g</h3>
+                    <p class="product-desc">Seimbang untuk diversifikasi dan likuiditas</p>
+                    <ul class="product-features">
+                        <li>Diversifikasi ideal</li>
+                        <li>Fleksibilitas tinggi</li>
+                        <li>Manajemen risiko</li>
+                    </ul>
+                    <div class="product-actions">
+                      <a class="buy-btn" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20membeli%20produk%20silvergram%20ukuran%20100%20g.%20Bagaimana%20teknis%20saya%20membelinya%3F%20nama%20saya%3A%20...." target="_blank" rel="noopener noreferrer">
+                        <span class="wa-icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.78 11.78 0 0 0 12.01 0C5.4 0 .03 5.37.03 11.98c0 2.11.56 4.2 1.63 6.02L0 24l6.14-1.6a12.04 12.04 0 0 0 5.87 1.5h.01c6.62 0 12-5.37 12-11.98 0-3.2-1.24-6.21-3.5-8.44ZM12.01 22c-1.86 0-3.68-.5-5.27-1.45l-.38-.23-3.64.95.97-3.55-.25-.37A9.95 9.95 0 0 1 2.03 12c0-5.52 4.48-10 9.98-10 2.67 0 5.18 1.04 7.07 2.92a9.88 9.88 0 0 1 2.93 7.06c0 5.52-4.49 10-10 10Zm5.48-7.45c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.47-2.4-1.5-.88-.78-1.47-1.73-1.64-2.02-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.62-.93-2.22-.24-.58-.48-.5-.68-.5-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.78.37-.26.3-1 1-1 2.45 0 1.45 1.05 2.85 1.2 3.05.15.2 2.07 3.17 5.02 4.45.7.3 1.24.47 1.66.6.7.22 1.33.19 1.83.12.56-.08 1.77-.72 2.03-1.43.25-.7.25-1.3.17-1.43-.08-.13-.27-.2-.57-.35Z"></path></svg>
+                        </span>
+                        Beli Sekarang
+                      </a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-badge">Starter Pack</div>
+                    <div class="product-weight">50 g</div>
+                    <img src="https://bisnisemasperak.com/sg/sg50.png" alt="Silvergram 50g Product" class="product-image-svg">
+                    <h3 class="product-title">Silvergram 50 g</h3>
+                    <p class="product-desc">Entry point ideal, fleksibel untuk pemula</p>
+                    <ul class="product-features">
+                        <li>Entry point terjangkau</li>
+                        <li>Cocok Serius</li>
+                        <li>Fleksibilitas maksimal</li>
+                    </ul>
+                    <div class="product-actions">
+                      <a class="buy-btn" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20membeli%20produk%20silvergram%20ukuran%2050%20g.%20Bagaimana%20teknis%20saya%20membelinya%3F%20nama%20saya%3A%20...." target="_blank" rel="noopener noreferrer">
+                        <span class="wa-icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.78 11.78 0 0 0 12.01 0C5.4 0 .03 5.37.03 11.98c0 2.11.56 4.2 1.63 6.02L0 24l6.14-1.6a12.04 12.04 0 0 0 5.87 1.5h.01c6.62 0 12-5.37 12-11.98 0-3.2-1.24-6.21-3.5-8.44ZM12.01 22c-1.86 0-3.68-.5-5.27-1.45l-.38-.23-3.64.95.97-3.55-.25-.37A9.95 9.95 0 0 1 2.03 12c0-5.52 4.48-10 9.98-10 2.67 0 5.18 1.04 7.07 2.92a9.88 9.88 0 0 1 2.93 7.06c0 5.52-4.49 10-10 10Zm5.48-7.45c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.47-2.4-1.5-.88-.78-1.47-1.73-1.64-2.02-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.62-.93-2.22-.24-.58-.48-.5-.68-.5-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.78.37-.26.3-1 1-1 2.45 0 1.45 1.05 2.85 1.2 3.05.15.2 2.07 3.17 5.02 4.45.7.3 1.24.47 1.66.6.7.22 1.33.19 1.83.12.56-.08 1.77-.72 2.03-1.43.25-.7.25-1.3.17-1.43-.08-.13-.27-.2-.57-.35Z"></path></svg>
+                        </span>
+                        Beli Sekarang
+                      </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#jaminan-gadai" class="cta-button">Lanjut Tentang Jaminan</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jaminan Gadai -->
+    <section id="jaminan-gadai" class="section">
+        <div class="container">
+            <h2 class="section-title">Kebijakan Jaminan Gadai</h2>
+            <p class="section-subtitle">Jaminan buyback dan gadai yang memberikan fleksibilitas maksimal untuk kebutuhan likuiditas Anda</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🔄</div>
+                    <h3 class="benefit-title">Buyback Guarantee</h3>
+                    <p class="benefit-desc">Penjualan kembali yang jelas prosedurnya dengan transparansi penuh</p>
+                    <div style="margin-top: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: rgba(236, 239, 241, 0.9);">
+                            <span style="background: linear-gradient(135deg, #ECEFF1, #BFC4CA); color: #0B0B0C; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">1</span>
+                            Ajukan verifikasi
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: rgba(236, 239, 241, 0.9);">
+                            <span style="background: linear-gradient(135deg, #ECEFF1, #BFC4CA); color: #0B0B0C; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">2</span>
+                            Konfirmasi harga
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; color: rgba(236, 239, 241, 0.9);">
+                            <span style="background: linear-gradient(135deg, #ECEFF1, #BFC4CA); color: #0B0B0C; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">3</span>
+                            Proses pencairan
+                        </div>
+                    </div>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">💳</div>
+                    <h3 class="benefit-title">Gadai Guarantee</h3>
+                    <p class="benefit-desc">Kebijakan gadai yang memudahkan kebutuhan likuiditas dengan mitra terpercaya</p>
+                    <div style="margin-top: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: rgba(236, 239, 241, 0.9);">
+                            <span style="background: linear-gradient(135deg, #ECEFF1, #BFC4CA); color: #0B0B0C; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">✓</span>
+                            Skema gadai fleksibel
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; color: rgba(236, 239, 241, 0.9);">
+                            <span style="background: linear-gradient(135deg, #ECEFF1, #BFC4CA); color: #0B0B0C; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">✓</span>
+                            Mitra penyedia keuangan
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; color: rgba(236, 239, 241, 0.9);">
+                            <span style="background: linear-gradient(135deg, #ECEFF1, #BFC4CA); color: #0B0B0C; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">✓</span>
+                            Syarat & ketentuan berlaku
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#paket-pendaftaran" class="cta-button">Lihat Paket Pendaftaran</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Paket Pendaftaran -->
+    <section id="paket-pendaftaran" class="section">
+        <div class="container">
+            <h2 class="section-title">Paket Pendaftaran</h2>
+            <p class="section-subtitle">Pilih paket yang sesuai dengan kebutuhan dan tujuan investasi perak Anda</p>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-badge">Serius</div>
+                    <div class="benefit-icon" style="margin-bottom: 1rem;">📚</div>
+                    <h3 class="product-title">Silver Channel</h3>
+                    <p class="product-desc">Akses konten edukasi & kanal informasi komprehensif</p>
+                    <p style="color: #BFC4CA; font-weight: 500; margin-bottom: 1rem;">Cocok untuk pemula yang ingin belajar</p>
+                    <ul class="product-features">
+                        <li>Konten edukasi lengkap</li>
+                        <li>Kanal informasi terkini</li>
+                        <li>Panduan investasi perak</li>
+                        <li>Update harga real-time</li>
+                    </ul>
+                    <div class="product-actions">
+                      <a class="join-btn" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20menjadi%20Silver%20Channel%2C%20bagaimana%20caranya%3F" target="_blank" rel="noopener noreferrer">
+                        <span class="wa-icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.78 11.78 0 0 0 12.01 0C5.4 0 .03 5.37.03 11.98c0 2.11.56 4.2 1.63 6.02L0 24l6.14-1.6a12.04 12.04 0 0 0 5.87 1.5h.01c6.62 0 12-5.37 12-11.98 0-3.2-1.24-6.21-3.5-8.44ZM12.01 22c-1.86 0-3.68-.5-5.27-1.45l-.38-.23-3.64.95.97-3.55-.25-.37A9.95 9.95 0 0 1 2.03 12c0-5.52 4.48-10 9.98-10 2.67 0 5.18 1.04 7.07 2.92a9.88 9.88 0 0 1 2.93 7.06c0 5.52-4.49 10-10 10Zm5.48-7.45c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.47-2.4-1.5-.88-.78-1.47-1.73-1.64-2.02-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.62-.93-2.22-.24-.58-.48-.5-.68-.5-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.78.37-.26.3-1 1-1 2.45 0 1.45 1.05 2.85 1.2 3.05.15.2 2.07 3.17 5.02 4.45.7.3 1.24.47 1.66.6.7.22 1.33.19 1.83.12.56-.08 1.77-.72 2.03-1.43.25-.7.25-1.3.17-1.43-.08-.13-.27-.2-.57-.35Z"></path></svg>
+                        </span>
+                        Saya ingin join
+                      </a>
+                    </div>
+                </div>
+                <div class="product-card featured-product">
+                    <div class="product-badge featured-badge">Network</div>
+                    <div class="benefit-icon" style="margin-bottom: 1rem;">🌐</div>
+                    <h3 class="product-title">EPI Channel</h3>
+                    <p class="product-desc">Ekosistem referal & dukungan terintegrasi</p>
+                    <p style="color: #BFC4CA; font-weight: 500; margin-bottom: 1rem;">Perfect untuk network builder</p>
+                    <ul class="product-features">
+                        <li>Sistem referal terintegrasi</li>
+                        <li>Dukungan ekosistem</li>
+                        <li>Bonus dan insentif</li>
+                        <li>Komunitas eksklusif</li>
+                    </ul>
+                    <div class="product-actions">
+                      <a class="join-btn" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20menjadi%20EPI%20Channel%2C%20bagaimana%20caranya%3F" target="_blank" rel="noopener noreferrer">
+                        <span class="wa-icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.78 11.78 0 0 0 12.01 0C5.4 0 .03 5.37.03 11.98c0 2.11.56 4.2 1.63 6.02L0 24l6.14-1.6a12.04 12.04 0 0 0 5.87 1.5h.01c6.62 0 12-5.37 12-11.98 0-3.2-1.24-6.21-3.5-8.44ZM12.01 22c-1.86 0-3.68-.5-5.27-1.45l-.38-.23-3.64.95.97-3.55-.25-.37A9.95 9.95 0 0 1 2.03 12c0-5.52 4.48-10 9.98-10 2.67 0 5.18 1.04 7.07 2.92a9.88 9.88 0 0 1 2.93 7.06c0 5.52-4.49 10-10 10Zm5.48-7.45c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.47-2.4-1.5-.88-.78-1.47-1.73-1.64-2.02-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.68-1.62-.93-2.22-.24-.58-.48-.5-.68-.5-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.78.37-.26.3-1 1-1 2.45 0 1.45 1.05 2.85 1.2 3.05.15.2 2.07 3.17 5.02 4.45.7.3 1.24.47 1.66.6.7.22 1.33.19 1.83.12.56-.08 1.77-.72 2.03-1.43.25-.7.25-1.3.17-1.43-.08-.13-.27-.2-.57-.35Z"></path></svg>
+                        </span>
+                        Saya ingin join
+                      </a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-badge">Pemula</div>
+                    <div class="benefit-icon" style="margin-bottom: 1rem;">⚔</div>
+                    <h3 class="product-title">Silver Warrior</h3>
+                    <p class="product-desc">Jalur intensif pengembangan & aktivasi promosi</p>
+                    <p style="color: #BFC4CA; font-weight: 500; margin-bottom: 1rem;">Ideal untuk investor pemula</p>
+                    <ul class="product-features">
+                        <li>Program intensif</li>
+                        <li>Aktivasi promosi</li>
+                        <li>Mentoring personal</li>
+                        <li>Strategi investasi lanjutan</li>
+                    </ul>
+                    <div class="product-actions">
+                      <a class="join-btn" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20menjadi%20Silver%20Warrior%2C%20bagaimana%20caranya%3F" target="_blank" rel="noopener noreferrer">
+                        <span class="wa-icon" aria-hidden="true">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.78 11.78 0 0 0 12.01 0C5.4 0 .03 5.37.03 11.98c0 2.11.56 4.2 1.63 6.02L0 24l6.14-1.6a12.04 12.04 0 0 0 5.87 1.5h.01c6.62 0 12-5.37 12-11.98 0-3.2-1.24-6.21-3.5-8.44ZM12.01 22c-1.86 0-3.68-.5-5.27-1.45l-.38-.23-3.64.95.97-3.55-.25-.37A9.95 9.95 0 0 1 2.03 12c0-5.52 4.48-10 9.98-10 2.67 0 5.18 1.04 7.07 2.92a9.88 9.88 0 0 1 2.93 7.06c0 5.52-4.49 10-10 10Zm5.48-7.45c-.3-.15-1.77-.87-2.04-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.47-2.4-1.5-.88-.78-1.47-1.73-1.64-2.02-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-
+0.02-.52-.08-.15-.68-1.62-.93-2.22-.24-.58-.48-.5-.68-.5-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.78.37-.26.3-1 1-1 2.45 0 1.45 1.05 2.85 1.2 3.05.15.2 2.07 3.17 5.02 4.45.7.3 1.24.47 1.66.6.7.22 1.33.19 1.83.12.56-.08 1.77-.72 2.03-1.43.25-.7.25-1.3.17-1.43-.08-.13-.27-.2-.57-.35Z"></path></svg>
+                        </span>
+                        Saya ingin join
+                      </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a href="#faq" class="cta-button">Pertanyaan Umum</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section">
+        <div class="container">
+            <h2 class="section-title">Pertanyaan Umum</h2>
+            <p class="section-subtitle">Temukan jawaban untuk pertanyaan yang sering diajukan tentang investasi perak Silvergram</p>
+            
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Apakah benar 100% Fine Silver?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        Ya, Silvergram menggunakan standar kemurnian tinggi dengan dokumentasi pendukung. Setiap produk memiliki sertifikat kemurnian 99.99% dan nomor seri untuk verifikasi keaslian.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Bagaimana proses buyback?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        Terdapat alur yang jelas dan transparan—cukup ajukan verifikasi, konfirmasi harga berdasarkan harga pasar terkini, lalu proses pencairan akan dilakukan sesuai prosedur yang telah ditetapkan.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Bagaimana kebijakan gadai?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        Disediakan skema gadai dengan mitra penyedia keuangan terpercaya. Anda dapat menggunakan Silvergram sebagai jaminan untuk kebutuhan likuiditas. Syarat & ketentuan berlaku sesuai kebijakan mitra.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Pengiriman aman?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        Dikemas rapi dengan pelacakan dan asuransi pengiriman. Garansi penuh bila terjadi kendala dalam pengiriman. Semua produk dikirim dengan packaging khusus dan tracking number.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Bagaimana cara verifikasi keaslian produk?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        Setiap Silvergram dilengkapi dengan nomor seri unik, sertifikat kemurnian, dan dapat diverifikasi melalui sistem online kami. Proses verifikasi berlapis memastikan keaslian produk.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Apakah ada minimum pembelian?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        Tidak ada minimum pembelian. Anda dapat memulai investasi dari Silvergram 50g sebagai entry point yang ideal untuk pemula, atau memilih sesuai kemampuan dan strategi investasi Anda.
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="color: rgba(236, 239, 241, 0.6); font-size: 0.9rem;">
+                    *Ketentuan detail mengacu pada kebijakan resmi yang berlaku
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="section">
+        <div class="container">
+            <div class="final-cta">
+                <h3 style="font-size: 2rem; font-weight: 600; margin-bottom: 2rem; color: #ECEFF1;">Kenapa Sekarang?</h3>
+                
+                <div class="reasons-list">
+                    <div class="reason-item">
+                        <div class="reason-icon">📈</div>
+                        <div>Harga perak global dinamis—mulailah averaging sejak dini</div>
+                    </div>
+                    <div class="reason-item">
+                        <div class="reason-icon">💬</div>
+                        <div>Akses buyback & gadai memudahkan manajemen cashflow</div>
+                    </div>
+                    <div class="reason-item">
+                        <div class="reason-icon">🕐</div>
+                        <div>Sistem pendampingan memastikan kamu tidak berjalan sendirian</div>
+                    </div>
+                </div>
+                
+                <h2 style="font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 1rem; background: linear-gradient(135deg, #ECEFF1 0%, #BFC4CA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Siap mulai dengan Silvergram?
+                </h2>
+                
+                <p style="font-size: 1.2rem; color: rgba(236, 239, 241, 0.8); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Konsultasikan kebutuhanmu sekarang dan mulai perjalanan investasi perak yang aman dan menguntungkan
+                </p>
+                
+                <a href="https://wa.me/[whatsapp]?text=Halo%20[nama],%20saya%20tertarik%20untuk%20konsultasi%20tentang%20investasi%20Silvergram.%20Mohon%20informasi%20lebih%20lanjut." class="whatsapp-button" target="_blank" rel="noopener noreferrer">
+                    <span style="font-size: 1.5rem;">💬</span>
+                    Chat ke WhatsApp
+                </a>
+                
+                <p style="color: rgba(236, 239, 241, 0.6); margin-top: 1.5rem; font-size: 0.9rem;">
+                    Konsultasi gratis • Respon cepat • Panduan lengkap
+                </p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="color: rgba(236, 239, 241, 0.5); font-size: 0.8rem;">
+                    *Ketentuan detail mengacu pada kebijakan resmi yang berlaku
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating WhatsApp -->
+    <div class="floating-whatsapp">
+        <div class="datasponsor">
+        <a href="https://wa.me/[whatsapp]?text=Halo%20[nama],%20saya%20tertarik%20untuk%20konsultasi%20tentang%20investasi%20Silvergram.%20Mohon%20informasi%20lebih%20lanjut." class="floating-wa-btn" target="_blank" rel="noopener noreferrer">
+            <span style="font-size: 1.5rem;">💬</span>
+            <span>Chat</span>
+        </a>
+        </div>
+    </div>
+
+    <!-- JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Silvergram",
+        "description": "100% Fine Silver dengan Buyback & Gadai Guarantee",
+        "brand": {
+            "@type": "Brand",
+            "name": "Silvergram"
+        },
+        "manufacturer": {
+            "@type": "Organization",
+            "name": "PT. Emas Perak Indonesia"
+        },
+        "offers": [
+            {
+                "@type": "Offer",
+                "name": "Silvergram 250g",
+                "description": "Pilihan utama untuk nilai akumulasi cepat",
+                "sku": "SG-250G"
+            },
+            {
+                "@type": "Offer", 
+                "name": "Silvergram 100g",
+                "description": "Seimbang untuk diversifikasi dan likuiditas",
+                "sku": "SG-100G"
+            },
+            {
+                "@type": "Offer",
+                "name": "Silvergram 50g", 
+                "description": "Entry point ideal, fleksibel untuk pemula",
+                "sku": "SG-50G"
+            }
+        ]
+    }
+    </script>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // FAQ Toggle Function
+        function toggleFAQ(button) {
+            const faqItem = button.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections for animation
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+    </script>
+    <script>
+      (function() {
+        function encode(text){ return encodeURIComponent(text); }
+        function getWaNumber(href){ var m = (href||'').match(/wa\.me\/([^?]+)/); return m ? m[1] : ''; }
+        function buildWaUrl(number, text){ return number ? 'https://wa.me/' + number + '?text=' + encode(text) : 'https://wa.me/?text=' + encode(text); }
+
+        // Beli Sekarang: ambil ukuran dari .product-weight atau fallback dari judul
+        document.querySelectorAll('.product-card .buy-btn').forEach(function(btn){
+          var card = btn.closest('.product-card');
+          if (!card) return;
+          var weightEl = card.querySelector('.product-weight');
+          var titleEl = card.querySelector('.product-title');
+          var ukuran = weightEl ? (weightEl.textContent || '').trim() : '';
+          if (!ukuran && titleEl){
+            var t = (titleEl.textContent || '').trim();
+            var m = t.match(/(\d+\s*g)/i);
+            ukuran = m ? m[1] : t;
+          }
+          var msg = 'Halo kak [nama], saya tertarik membeli produk silvergram ukuran ' + ukuran + '. Bagaimana teknis saya membelinya? nama saya: ....';
+          var number = getWaNumber(btn.getAttribute('href'));
+          btn.setAttribute('href', buildWaUrl(number, msg));
+          btn.setAttribute('aria-label', 'Beli ' + ukuran + ' via WhatsApp');
+        });
+
+        // Paket Pendaftaran: gunakan judul card
+        document.querySelectorAll('#paket-pendaftaran .product-card .join-btn').forEach(function(btn){
+          var card = btn.closest('.product-card');
+          if (!card) return;
+          var titleEl = card.querySelector('.product-title');
+          var judul = titleEl ? (titleEl.textContent || '').trim() : '';
+          var msg = 'Halo kak [nama], saya tertarik menjadi ' + judul + ', bagaimana caranya?';
+          var number = getWaNumber(btn.getAttribute('href'));
+          btn.setAttribute('href', buildWaUrl(number, msg));
+          btn.setAttribute('aria-label', 'Join ' + judul + ' via WhatsApp');
+        });
+
+        // Card Produk: buat seluruh card bisa diklik mengarah ke WhatsApp
+        document.querySelectorAll('#produk-terlaris .product-card').forEach(function(card){
+          var btn = card.querySelector('.buy-btn');
+          if (!btn) return;
+          card.style.cursor = 'pointer';
+          card.setAttribute('role', 'button');
+          card.setAttribute('tabindex', '0');
+          function go(){ var url = btn.getAttribute('href'); window.open(url, '_blank', 'noopener'); }
+          card.addEventListener('click', function(e){ if (e.target.closest('a')) return; go(); });
+          card.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+        });
+
+        // Card Paket Pendaftaran: seluruh card bisa diklik mengarah ke WhatsApp
+        document.querySelectorAll('#paket-pendaftaran .product-card').forEach(function(card){
+          var btn = card.querySelector('.join-btn');
+          if (!btn) return;
+          card.style.cursor = 'pointer';
+          card.setAttribute('role', 'button');
+          card.setAttribute('tabindex', '0');
+          function go(){ var url = btn.getAttribute('href'); window.open(url, '_blank', 'noopener'); }
+          card.addEventListener('click', function(e){ if (e.target.closest('a')) return; go(); });
+          card.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+        });
+      })();
+    </script>
+</body>
+</html>

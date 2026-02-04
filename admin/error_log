@@ -1,0 +1,7 @@
+[29-Sep-2025 07:03:41 asia/jakarta] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'Registrasi Berhasil di {{SITE_NAME}}'', 
+                mailketing_template_...' at line 2 in /home/bisnisem/public_html/fungsi.php:54
+Stack trace:
+#0 /home/bisnisem/public_html/fungsi.php(54): mysqli_query()
+#1 /home/bisnisem/public_html/admin/template_editor.php(105): db_query()
+#2 {main}
+  thrown in /home/bisnisem/public_html/fungsi.php on line 54

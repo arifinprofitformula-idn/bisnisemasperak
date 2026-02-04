@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meezan Gold - Amankan Nilai Harta</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #E6C76A;
+      --emerald: #50C878;
+      --emerald-light: #6AD78E;
+      --bg: #FFFFFF;
+      --fg: #0B0B0B;
+      --border: #E5E7EB;
+      --muted: #6B7280;
+      --gold-strong: #E9C84A;
+      --gold-foil1: #F1D76C;
+      --gold-foil2: #B8902D;
+      --emerald-dark: #2FA960;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .logo-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--emerald));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 4rem 1.5rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    @media (min-width: 768px) {
+      .hero-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (min-width: 768px) {
+      .hero-content {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .hero-content h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--fg);
+      margin: 1rem 0;
+    }
+    .hero-content { text-align: center; }
+
+    @media (min-width: 768px) {
+      .hero-content h1 {
+        font-size: 3rem;
+      }
+    }
+
+    .hero-tagline {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-desc {
+      font-size: 1.125rem;
+      color: rgba(0, 0, 0, 0.7);
+      margin: 1.5rem 0;
+      line-height: 1.8;
+    }
+
+    .video-embed {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 1rem;
+      overflow: hidden;
+      background: #0B0B0B;
+      border: 2px solid #111111;
+      padding-top: 28px;
+      margin-top: 1rem;
+    }
+    .video-embed iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .monitor-topbar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 28px;
+      background: #1F2937;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+    }
+    .monitor-topbar span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .monitor-topbar span:nth-child(1) { background: #EF4444; }
+    .monitor-topbar span:nth-child(2) { background: #F59E0B; }
+    .monitor-topbar span:nth-child(3) { background: #10B981; }
+    .video-stand {
+      width: 64px;
+      height: 10px;
+      background: #1F2937;
+      border-radius: 6px;
+      margin: 8px auto 0;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    }
+
+    .bullet-list {
+      list-style: none;
+      margin: 1.5rem 0;
+      space-y: 0.75rem;
+    }
+    .hero-bullets-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+      padding: 1rem 1.25rem;
+      max-width: 720px;
+      margin: 1.5rem auto 0;
+    }
+
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+      color: rgba(0, 0, 0, 0.8);
+    }
+
+    .bullet-list li::before {
+      content: "✓";
+      color: var(--emerald);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+
+    .cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .cta-group { justify-content: center; }
+
+    @media (min-width: 640px) {
+      .cta-group {
+        flex-direction: row;
+      }
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold-foil1), var(--gold));
+      color: white;
+      box-shadow: 0 10px 24px rgba(80, 200, 120, 0.25), 0 12px 28px rgba(212, 175, 55, 0.35), inset 0 -2px 0 rgba(0,0,0,0.1);
+    }
+    .btn-primary-gold {
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, var(--gold-foil1), var(--gold-strong));
+      color: #0B0B0B;
+      border: 1px solid rgba(80, 200, 120, 0.25);
+      box-shadow: 0 14px 30px rgba(212, 175, 55, 0.4), 0 8px 18px rgba(80, 200, 120, 0.2), inset 0 -2px 0 rgba(0,0,0,0.08);
+    }
+    .btn-primary-gold:hover { transform: translateY(-2px); filter: brightness(1.03); }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--gold);
+      background: transparent;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(212, 175, 55, 0.05);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(212, 175, 55, 0.18);
+    }
+
+    .cta-note {
+      font-size: 0.875rem;
+      color: rgba(0, 0, 0, 0.6);
+      margin-top: 0.5rem;
+    }
+
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(80, 200, 120, 0.1));
+      border-radius: 1.5rem;
+      filter: blur(3rem);
+    }
+
+    .hero-card {
+      position: relative;
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border);
+    }
+
+    .hero-card-visual {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(80, 200, 120, 0.2));
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .hero-card-visual-icon {
+      font-size: 3.5rem;
+    }
+
+    .hero-card-visual h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--fg);
+    }
+
+    .hero-card-visual p {
+      font-size: 0.875rem;
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    /* Sections */
+    section {
+      padding: 5rem 1.5rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #0B0B0B;
+      margin: 0 auto 1rem;
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, rgba(241, 215, 108, 0.35), rgba(212, 175, 55, 0.18));
+      border: 1px solid rgba(80, 200, 120, 0.25);
+      box-shadow: 0 10px 24px rgba(212, 175, 55, 0.2);
+      text-align: center;
+    }
+    .section-note { text-align: center; font-size: 0.95rem; color: rgba(0,0,0,0.7); }
+    #coming-soon .section-label { margin-bottom: 0.75rem; }
+    #coming-soon .section-note { margin-bottom: 0.75rem; }
+    .hero-logo { width: 160px; height: auto; display: block; margin: 0.25rem auto 0.75rem; }
+    .product-image-placeholder img { width: 100%; height: 100%; object-fit: contain; }
+    .feature-icon img { width: 48px; height: 48px; display: block; }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .section-title {
+        font-size: 2.25rem;
+      }
+    }
+
+    .section-desc {
+      font-size: 1.125rem;
+      color: rgba(0, 0, 0, 0.7);
+      max-width: 42rem;
+      margin: 0 auto;
+    }
+
+    /* Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+      transform: translateY(-6px) rotateX(2deg) rotateY(1deg);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-desc {
+      font-size: 0.95rem;
+      color: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Products Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .product-card.featured {
+      border: 2px solid var(--gold);
+      box-shadow: 0 20px 40px rgba(212, 175, 55, 0.25), 0 10px 24px rgba(80, 200, 120, 0.12);
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(80, 200, 120, 0.06));
+      transform: scale(1.05);
+    }
+
+    .product-card:hover {
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.12);
+      transform: translateY(-8px) rotateX(2deg) rotateY(1deg);
+    }
+
+    .product-badge {
+      display: inline-block;
+      background: rgba(212, 175, 55, 0.2);
+      color: var(--gold);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.5rem 0.75rem;
+      border-radius: 9999px;
+      margin-bottom: 1rem;
+    }
+
+    .product-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 0.5rem;
+    }
+
+    .product-weight {
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .product-desc {
+      color: rgba(0, 0, 0, 0.7);
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .product-features {
+      list-style: none;
+      margin-bottom: 1.5rem;
+      space-y: 0.5rem;
+    }
+
+    .product-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      color: rgba(0, 0, 0, 0.8);
+      margin-bottom: 0.5rem;
+    }
+
+    .product-features li::before {
+      content: "✓";
+      color: var(--emerald);
+      font-weight: 700;
+    }
+
+    .product-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card-simple {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-card-simple:hover {
+      transform: translateY(-6px) rotateX(2deg) rotateY(1deg);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+    }
+    .product-image-placeholder {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 0.75rem;
+      background: linear-gradient(135deg, rgba(80, 200, 120, 0.15), rgba(212, 175, 55, 0.15));
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .product-image-placeholder .coming-soon-img { opacity: 0.35; }
+    .product-image-placeholder .coming-soon-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #0B0B0B;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .btn-whatsapp {
+      background: var(--emerald);
+      color: #FFFFFF;
+      width: 100%;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 8px 20px rgba(80, 200, 120, 0.25);
+    }
+    .btn-whatsapp:hover {
+      filter: brightness(1.05);
+      transform: translateY(-2px);
+    }
+    .btn-disabled {
+      background: #E5E7EB;
+      color: #6B7280;
+      width: 100%;
+      cursor: not-allowed;
+    }
+
+    /* Process Section */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .process-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .process-step {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .process-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 0.5rem;
+    }
+
+    .process-desc {
+      font-size: 0.95rem;
+      color: rgba(0, 0, 0, 0.7);
+    }
+
+    /* FAQ Section */
+    .faq-list {
+      max-width: 48rem;
+      margin: 0 auto;
+      space-y: 1rem;
+    }
+
+    .faq-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .faq-q {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 0.75rem;
+    }
+
+    .faq-a {
+      font-size: 0.95rem;
+      color: rgba(0, 0, 0, 0.7);
+      line-height: 1.8;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(80, 200, 120, 0.1));
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 2rem;
+      padding: 3rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 20px 44px rgba(0,0,0,0.1);
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .cta-section h2 {
+        font-size: 2.25rem;
+      }
+    }
+
+    .cta-section p {
+      font-size: 1.125rem;
+      color: rgba(0, 0, 0, 0.7);
+      max-width: 42rem;
+      margin: 0 auto 2rem;
+    }
+
+    .sticky-cta {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--emerald);
+      color: #FFFFFF;
+      padding: 0.9rem 1.5rem;
+      border-radius: 9999px;
+      box-shadow: 0 12px 30px rgba(80, 200, 120, 0.35);
+      z-index: 60;
+      display: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .hero {
+        padding: 3rem 1.5rem;
+      }
+
+      .hero-content h1 {
+        font-size: 1.875rem;
+      }
+
+      section {
+        padding: 3rem 1.5rem;
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+      }
+
+      .cta-section {
+        padding: 2rem 1.5rem;
+      }
+
+      .cta-section h2 {
+        font-size: 1.5rem;
+      }
+      .sticky-cta {
+        display: inline-block;
+      }
+      .product-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="container">
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <img class="hero-logo" src="https://bisnisemasperak.com/newmeezan/meezan-gold-logo.png" alt="Meezan Gold Logo" />
+        <div class="hero-tagline">Your Wealth in Balance</div>
+        <h1>Amankan Nilai Harta, Seimbangkan Dunia &amp; Akhirat</h1>
+        <p class="hero-desc">
+          <strong>Brand Emas Muslim Premium #1 di Indonesia</strong> dengan sistem e-Warrant, terintegrasi wakaf, dan dikelola amanah untuk membantu Anda menjaga nilai harta secara adil dan nyata.
+        </p>
+        <div class="video-embed">
+          <div class="monitor-topbar"><span></span><span></span><span></span></div>
+          <iframe loading="lazy" src="https://www.youtube.com/embed/whs2diKgLfw" title="Teaser Meezan" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="video-stand"></div>
+        
+        <div class="hero-bullets-card">
+        <ul class="bullet-list">
+          <li>Emas murni 999.9 Fine Gold</li>
+          <li>Keaslian dan keamanan produk terjamin dengan teknologi e-Warrant</li>
+          <li>Terintegrasi wakaf di setiap gram nya</li>
+          <li>Desain modern &amp; timeless, prestise saat disimpan maupun dihadiahkan</li>
+          <li>Sangat Liquid, mudah diterima di lembaga gadai syariah</li>
+        </ul>
+        </div>
+
+        <div class="cta-group">
+          <button class="btn btn-primary-gold" onclick="window.open('https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20ingin%20konsultasi%20terkait%20Meezan%20Gold.', '_blank')">
+            <span>💬</span>
+            <span>Konsultasi via WhatsApp</span>
+          </button>
+          <button class="btn btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Pelajari Lebih Lanjut</button>
+        </div>
+        <p class="cta-note">Gratis, tanpa komitmen beli. Ceritakan dulu kebutuhan Anda.</p>
+      </div>
+
+      <div class="hero-visual">
+      
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features">
+    <div class="section-header">
+      <div class="section-label">⚡ Keunggulan Meezan</div>
+      <h2 class="section-title" style="background: linear-gradient(135deg, var(--gold-foil1), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Fitur Unggulan yang Membedakan</h2>
+      <p class="section-desc">Teknologi terdepan untuk melindungi dan mengembangkan aset berharga Anda</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><img src="https://bisnisemasperak.com/newmeezan/e-warrant.png" alt="E-Warrant" /></div>
+        <h3 class="feature-title">E-Warrant Technology</h3>
+        <p class="feature-desc">Sistem keamanan digital terdepan untuk memastikan keaslian setiap gram emas Anda</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <h3 class="feature-title">Nilai Investasi Stabil</h3>
+        <p class="feature-desc">Emas murni 999.9 Fine Gold dengan nilai yang terus meningkat seiring waktu</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">❤️</div>
+        <h3 class="feature-title">Terintegrasi Wakaf</h3>
+        <p class="feature-desc">Setiap pembelian berkontribusi pada program wakaf untuk kebaikan bersama</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-title">Proses Cepat &amp; Mudah</h3>
+        <p class="feature-desc">Konsultasi gratis dan proses pembelian yang transparan tanpa biaya tersembunyi</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <h3 class="feature-title">Desain Premium</h3>
+        <p class="feature-desc">Kemasan dan desain modern yang elegan untuk koleksi pribadi atau hadiah istimewa</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✓</div>
+        <h3 class="feature-title">Amanah Terjamin</h3>
+        <p class="feature-desc">Pengelolaan amanah dengan standar tertinggi dan transparansi penuh</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products">
+    <div class="section-header">
+      <div class="section-label">🏆 Varian Produk</div>
+      <h2 class="section-title">Pilih Varian yang Sesuai Kebutuhan</h2>
+    </div>
+
+    <div class="products-grid">
+      <div class="product-card">
+        <h3 class="product-name">Mikro</h3>
+        <p class="product-weight">1-5 gram</p>
+        <p class="product-desc">Sempurna untuk pemula atau hadiah kecil yang berkesan</p>
+        <ul class="product-features">
+          <li>Harga terjangkau</li>
+          <li>Mudah dibeli</li>
+          <li>Cocok untuk hadiah</li>
+        </ul>
+        <button class="btn btn-secondary" style="width: 100%;" onclick="window.open('https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20dengan%20produk%20Mikro%20(1%E2%80%935%20gram)%20Meezan%20Gold.%20Mohon%20info%20harga%20dan%20ketersediaan.', '_blank')">Konsultasi Sekarang</button>
+      </div>
+
+      <div class="product-card featured">
+        <div class="product-badge">RECOMMENDED</div>
+        <h3 class="product-name">Core</h3>
+        <p class="product-weight">10-50 gram</p>
+        <p class="product-desc">Pilihan utama untuk investasi jangka panjang</p>
+        <ul class="product-features">
+          <li>Investasi optimal</li>
+          <li>Nilai stabil</li>
+          <li>Fleksibel</li>
+        </ul>
+        <button class="btn btn-primary" style="width: 100%;" onclick="window.open('https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20dengan%20produk%20Core%20(10%E2%80%9350%20gram)%20Meezan%20Gold.%20Mohon%20info%20harga%20dan%20ketersediaan.', '_blank')">Konsultasi Sekarang</button>
+      </div>
+
+      <div class="product-card">
+        <h3 class="product-name">Prime</h3>
+        <p class="product-weight">100+ gram</p>
+        <p class="product-desc">Untuk investor serius dengan nilai investasi maksimal</p>
+        <ul class="product-features">
+          <li>ROI tinggi</li>
+          <li>Eksklusif</li>
+          <li>Premium service</li>
+        </ul>
+        <button class="btn btn-secondary" style="width: 100%;" onclick="window.open('https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20dengan%20produk%20Prime%20(100%2B%20gram)%20Meezan%20Gold.%20Mohon%20info%20harga%20dan%20ketersediaan.', '_blank')">Konsultasi Sekarang</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="product-cards">
+    <div class="section-header">
+      <div class="section-label">🛍️ Pilihan Gramasi</div>
+      <h2 class="section-title" style="background: linear-gradient(135deg, var(--gold-foil1), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Pesan Langsung Sesuai Gramasi</h2>
+      <p class="section-desc">Pilih ukuran yang diinginkan, klik tombol untuk memulai pesanan via WhatsApp</p>
+    </div>
+    <div class="product-cards-grid">
+      <div class="product-card-simple">
+        <div class="product-image-placeholder"><img src="https://bisnisemasperak.com/newmeezan/1g.png" alt="Emas 1g" /></div>
+        <h3 class="product-name">Emas 1g</h3>
+        <a class="btn btn-whatsapp" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20dengan%20produk%20Emas%201g%20Meezan%20Gold." target="_blank" rel="noopener">Pesan via WhatsApp</a>
+      </div>
+      <div class="product-card-simple">
+        <div class="product-image-placeholder"><img src="https://bisnisemasperak.com/newmeezan/5g.png" alt="Emas 5g" /></div>
+        <h3 class="product-name">Emas 5g</h3>
+        <a class="btn btn-whatsapp" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20dengan%20produk%20Emas%205g%20Meezan%20Gold." target="_blank" rel="noopener">Pesan via WhatsApp</a>
+      </div>
+      <div class="product-card-simple">
+        <div class="product-image-placeholder"><img src="https://bisnisemasperak.com/newmeezan/10g.png" alt="Emas 10g" /></div>
+        <h3 class="product-name">Emas 10g</h3>
+        <a class="btn btn-whatsapp" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20dengan%20produk%20Emas%2010g%20Meezan%20Gold." target="_blank" rel="noopener">Pesan via WhatsApp</a>
+      </div>
+      <div class="product-card-simple">
+        <div class="product-image-placeholder"><img src="https://bisnisemasperak.com/newmeezan/25g.png" alt="Emas 25g" /></div>
+        <h3 class="product-name">Emas 25g</h3>
+        <a class="btn btn-whatsapp" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20dengan%20produk%20Emas%2025g%20Meezan%20Gold." target="_blank" rel="noopener">Pesan via WhatsApp</a>
+      </div>
+    </div>
+    </section>
+    <section id="coming-soon">
+      <div class="section-header" style="text-align:center;">
+        <div class="section-label">Coming Soon</div>
+        <div class="section-note">Segera hadir gramasi lainnya, pastikan Anda memilikinya juga nanti</div>
+      </div>
+    <div class="product-cards-grid">
+      <div class="product-card-simple">
+        <div class="product-image-placeholder">
+          <img class="coming-soon-img" src="https://bisnisemasperak.com/newmeezan/meezan-mockup.png" alt="Coming Soon" />
+          <div class="coming-soon-overlay">Coming Soon</div>
+        </div>
+        <h3 class="product-name">Emas 0.1g</h3>
+        <div class="btn btn-disabled">Coming Soon</div>
+      </div>
+      <div class="product-card-simple">
+        <div class="product-image-placeholder">
+          <img class="coming-soon-img" src="https://bisnisemasperak.com/newmeezan/meezan-mockup.png" alt="Coming Soon" />
+          <div class="coming-soon-overlay">Coming Soon</div>
+        </div>
+        <h3 class="product-name">Emas 0.5g</h3>
+        <div class="btn btn-disabled">Coming Soon</div>
+      </div>
+      <div class="product-card-simple">
+        <div class="product-image-placeholder">
+          <img class="coming-soon-img" src="https://bisnisemasperak.com/newmeezan/meezan-mockup.png" alt="Coming Soon" />
+          <div class="coming-soon-overlay">Coming Soon</div>
+        </div>
+        <h3 class="product-name">Emas 2g</h3>
+        <div class="btn btn-disabled">Coming Soon</div>
+      </div>
+      <div class="product-card-simple">
+        <div class="product-image-placeholder">
+          <img class="coming-soon-img" src="https://bisnisemasperak.com/newmeezan/meezan-mockup.png" alt="Coming Soon" />
+          <div class="coming-soon-overlay">Coming Soon</div>
+        </div>
+        <h3 class="product-name">Emas 50g</h3>
+        <div class="btn btn-disabled">Coming Soon</div>
+      </div>
+      <div class="product-card-simple">
+        <div class="product-image-placeholder">
+          <img class="coming-soon-img" src="https://bisnisemasperak.com/newmeezan/meezan-mockup.png" alt="Coming Soon" />
+          <div class="coming-soon-overlay">Coming Soon</div>
+        </div>
+        <h3 class="product-name">Emas 100g</h3>
+        <div class="btn btn-disabled">Coming Soon</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section>
+    <div class="section-header">
+      <div class="section-label">🎯 Langkah Mudah</div>
+      <h2 class="section-title">Bagaimana Cara Memulai?</h2>
+    </div>
+
+    <div class="process-grid">
+      <div class="process-card">
+        <div class="process-step">01</div>
+        <h3 class="process-title">Konsultasi Gratis</h3>
+        <p class="process-desc">Hubungi tim kami via WhatsApp untuk diskusi kebutuhan Anda</p>
+      </div>
+      <div class="process-card">
+        <div class="process-step">02</div>
+        <h3 class="process-title">Pilih Varian</h3>
+        <p class="process-desc">Tentukan varian Meezan Gold yang paling sesuai dengan budget</p>
+      </div>
+      <div class="process-card">
+        <div class="process-step">03</div>
+        <h3 class="process-title">Proses Pembelian</h3>
+        <p class="process-desc">Transaksi aman dan mudah dengan berbagai metode pembayaran</p>
+      </div>
+      <div class="process-card">
+        <div class="process-step">04</div>
+        <h3 class="process-title">Terima &amp; Nikmati</h3>
+        <p class="process-desc">Dapatkan e-Warrant digital dan sertifikat keaslian emas Anda</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="accepted-at-bjb">
+    <div class="section-header">
+      <div class="section-label">🏦 Diterima Gadai</div>
+      <h2 class="section-title">DITERIMA GADAI DI BANK JABAR SYARIAH</h2>
+    </div>
+    <div class="feature-card">
+      <div class="video-embed">
+        <div class="monitor-topbar"><span></span><span></span><span></span></div>
+        <iframe src="https://www.youtube.com/embed/CYpYsm7JyTo" title="Kemudahan Gadai Meezan Gold di Bank Jabar Banten Syariah" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <div class="video-stand"></div>
+      </div>
+      <p class="section-desc" style="margin-top:1rem;">
+        Meezan Gold telah diterima di Bank Jabar Banten Syariah dan di berbagai lembaga keuangan syariah lainnya. Memudahkan Anda dalam keperluan gadai logam untuk kebutuhan-kebutuhan keluarga Anda.
+      </p>
+      <div>
+        <button class="btn btn-whatsapp" onclick="window.open('https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20tertarik%20memiliki%20Meezan%20Gold%20dan%20informasi%20gadai%20di%20BJB%20Syariah.', '_blank')">Saya Tertarik Memiliki Meezan Gold</button>
+      </div>
+    </div>
+  </section>
+  <section id="faq">
+    <div class="section-header">
+      <div class="section-label">❓ Pertanyaan Umum</div>
+      <h2 class="section-title">FAQ - Jawaban untuk Anda</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <h3 class="faq-q">Apa itu Meezan Gold?</h3>
+        <p class="faq-a">Meezan Gold adalah produk emas murni 999.9 Fine Gold dengan sistem e-Warrant digital, terintegrasi wakaf, dan dikelola dengan amanah untuk investasi jangka panjang Anda.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 class="faq-q">Apakah emas Meezan asli dan aman?</h3>
+        <p class="faq-a">Ya, semua produk Meezan Gold adalah emas murni 999.9 dengan sertifikat keaslian dan teknologi e-Warrant yang menjamin keamanan serta keaslian setiap gram.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 class="faq-q">Berapa harga Meezan Gold?</h3>
+        <p class="faq-a">Harga Meezan Gold mengikuti harga pasar emas internasional dengan markup yang kompetitif. Hubungi tim kami untuk penawaran harga terkini sesuai varian pilihan Anda.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 class="faq-q">Bagaimana cara membeli Meezan Gold?</h3>
+        <p class="faq-a">Anda dapat menghubungi tim kami via WhatsApp untuk konsultasi gratis, kemudian melakukan transaksi dengan metode pembayaran yang tersedia.</p>
+      </div>
+
+      <div class="faq-item">
+        <h3 class="faq-q">Apakah ada biaya tersembunyi?</h3>
+        <p class="faq-a">Tidak ada biaya tersembunyi. Semua biaya transparan dan akan dijelaskan di awal konsultasi. Anda hanya membayar harga emas dan layanan yang disepakati.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section id="contact">
+    <div class="cta-section">
+      <h2>Siap Mengamankan Harta Anda?</h2>
+      <p>Konsultasikan kebutuhan investasi emas Anda dengan tim ahli Meezan Gold. Gratis, tanpa komitmen, dan penuh transparansi.</p>
+      <button class="btn btn-primary-gold" onclick="window.open('https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20ingin%20konsultasi%20terkait%20Meezan%20Gold.', '_blank')">
+        <span>💬</span>
+        <span>Hubungi Kami Sekarang</span>
+      </button>
+    </div>
+  </section>
+    </div>
+  </main>
+  <a class="sticky-cta" href="https://wa.me/[whatsapp]?text=Halo%20kak%20[nama]%2C%20saya%20ingin%20pesan%20Meezan%20Gold" target="_blank" rel="noopener">Pesan via WhatsApp</a>
+</body>
+</html>

@@ -1,0 +1,72 @@
+/* Leaflet CSS Local Fallback - Enhanced */
+.leaflet-container {
+    overflow: hidden;
+    position: relative;
+    background: #ddd;
+    outline: 0;
+    font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.leaflet-container .leaflet-pane {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.leaflet-pane { z-index: 400; }
+.leaflet-tile-pane { z-index: 200; }
+.leaflet-overlay-pane { z-index: 400; }
+.leaflet-shadow-pane { z-index: 500; }
+.leaflet-marker-pane { z-index: 600; }
+.leaflet-tooltip-pane { z-index: 650; }
+.leaflet-popup-pane { z-index: 700; }
+
+/* Fallback specific styles */
+.leaflet-fallback {
+    background: linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
+                linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
+                linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+.leaflet-fallback-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.leaflet-fallback-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+    color: #999;
+}
+
+/* Emergency fallback styles */
+.map-emergency-fallback {
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: #666;
+}
+
+.map-emergency-fallback .emergency-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+    color: #999;
+}
+
+.map-emergency-fallback .emergency-text {
+    font-size: 14px;
+    line-height: 1.4;
+}

@@ -1,0 +1,17 @@
+RewriteEngine On
+
+# Disable directory listing globally
+Options -Indexes
+
+# Direct mapping for EPIC HUB LITE info page (SEO-friendly URL)
+RewriteRule ^informasi-login-pengguna/?$ theme/softgold/info-login-pengguna.php [L,QSA]
+RewriteRule ^welcome-epic/?$ welcome-epi.php [L,QSA]
+# API endpoint: real-time member search
+RewriteRule ^api/member-search/?$ api/member-search.php [L,QSA]
+
+# Allow direct files and directories
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+
+# Fallback to front controller
+RewriteRule ^.*$ ./index.php [L,QSA]

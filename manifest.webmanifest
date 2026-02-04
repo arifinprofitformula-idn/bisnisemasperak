@@ -1,0 +1,22 @@
+{
+  "name": "EPIC Hub",
+  "short_name": "EPIC Hub",
+  "description": "Akses cepat ke EPI Hub di perangkat Anda",
+  "start_url": "/login",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#DAA520",
+  "icons": [
+    {
+      "src": "/upload/epic-hub.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/upload/epic-hub.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

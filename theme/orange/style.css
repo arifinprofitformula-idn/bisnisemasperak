@@ -1,0 +1,307 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    background-color: #EEEDF3;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.konten {
+    background-color: #f8f9fa;
+    padding: 20px;
+    flex: 1; /* Tambahkan ini untuk mengisi ruang yang tersedia */
+}
+
+.footer {
+    margin-top: auto; /* Dorong footer ke bagian bawah */
+    background-color: #F09B05; /* Sesuaikan warna footer */
+    text-align: center;
+    padding: 15px;
+    color: #ffffff;
+}
+
+.sticky-menu {
+    display: none; /* Hide by default */
+    position: fixed; /* Sticky position */
+    bottom: 0; /* Stick to the bottom */
+    left: 0; /* Align to the left */
+    width: 100%; /* Full width */
+    background-color: #F09B05; /* Background color */
+    text-align: center; /* Center the content */
+    padding: 13px 0; /* Padding for the menu */
+    z-index: 1000; /* Ensure it's on top */
+}
+
+.sm-item {
+    display: inline-block; /* Arrange items inline */
+    margin: 0; /* Remove default margins */
+    padding: 0 12px; /* Add small padding */
+    color: #ffffff; /* Text color */
+}
+
+.sm-item a { color: #ffffff; text-decoration: none;}
+.sm-item i {
+    display: block; /* Display icons as block elements */
+    font-size: 24px; /* Icon size */
+}
+.sm-item small { font-size: 12px; }
+
+@media (max-width: 768px) {
+    .footer {
+        display: none; /* Hide footer on mobile */
+    }
+    .sticky-menu {
+        display: block; /* Show sticky menu on mobile */
+    }
+}
+
+.info {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Style untuk header */
+.navbar {
+    padding: 20px;
+    background-color: #F09B05; /* Ungu tua */
+    border-radius: 0 0 15px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    position: relative; /* Agar menu tetap di dalam header */
+}
+
+.navbar a { color: #ffffff; }
+
+.bg-body-tertiary { background-color: #F09B05 !important; }
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5); /* Ubah warna border hamburger */
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    /* Ubah warna garis navbar-toggler menjadi putih */
+}
+
+.nav-link.active {
+    color: #ffffff !important; /* Ubah warna teks menjadi putih */
+    background-color: #F09B05 !important; /* Tambahkan latar belakang (jika diperlukan) */
+}
+
+.dropdown-menu .dropdown-item {
+    color: #F09B05 !important; /* Ubah warna teks menjadi #F09B05 */
+}
+
+.dropdown-menu .dropdown-item:hover, 
+.dropdown-menu .dropdown-item:focus {
+    background-color: #fdd0af !important; /* Warna latar belakang saat hover (bisa diubah sesuai keinginan) */
+    color: #000000 !important; /* Warna teks tetap #F09B05 saat hover */
+}
+
+a { color: #084BAD; }
+
+.collection-item { border: 1px solid #cccccc; margin: 5px; background: #eee; padding: 5px 0; font-size: 1.2em; }
+#sortable {margin: 0;padding: 0;}
+
+.info-box {
+    background-color: #ffffff; /* Putih */
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0; /* Jarak di atas dan bawah */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: #000000; /* Teks hitam untuk info */
+}
+
+.icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Fleksibel dengan lebar kolom minimum 200px */
+    gap: 20px;
+    padding: 20px 0;
+}
+
+
+.icon-card {
+    background-color: #ffffff; /* Putih */
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+.icon-card:hover {
+    background-color: #F09B05; /* Ungu pastel saat hover */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+.icon-card img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 10px;
+}
+.icon-card p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #3d4176; /* Biru tua untuk teks */
+    transition: color 0.3s; /* Transisi untuk perubahan warna */
+    text-decoration: none; /* Tidak ada garis bawah */
+}
+.icon-card.active p {
+    color: #ffffff; /* Teks putih saat aktif */
+}
+
+.infokotak {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.kotak {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.icon-column {
+    flex: 0 0 80px;
+    margin-right: 20px;
+}
+
+.icon {
+    width: 80px;
+    height: 80px;
+}
+
+.icon-card {
+    cursor: pointer; /* Show pointer when hovering over the card */
+    height: 150px;
+}
+
+.info-column {
+    flex: 1;
+}
+
+.info-column p {
+    font-size: 14px;
+    color: #555;
+}
+
+.info-column h3 {
+    font-size: 18px;
+    color: #333;
+    margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+    .infokotak {
+        grid-template-columns: 1fr;
+    }
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+#myDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.box {
+  font-family: 'Poppins', sans-serif;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width:100%;
+  margin-bottom: 0px;
+  padding: 10px;
+  z-index: 9999;
+  text-align: center;
+}
+
+.social-proof a { color: #fff; }
+.social-proof-box { 
+  padding: 10px;
+  border-radius: 5px;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+#downline1 {float:left; width:100%; max-width:600px; overflow: auto;}
+.geserkanan {margin:0; padding: 0 0 0 15px; background:url('img/line.gif') repeat-y;}
+.listmember {background:url('img/line.gif') repeat-y;}
+
+#detilprofil {    
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  top: 0;
+  left: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+/* #detilprofil {display:inline-block; margin-left:20px; border-left:solid 1px #cccccc;padding:5px} */
+a:hover {cursor:pointer;}
+#themember {
+  position: fixed;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);  
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 500px;
+  height: 60%;
+  overflow-y: scroll;
+  padding: 10px;
+}
+.close {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+  background-color: red;
+  color: white;
+}
+
+
+.table {
+  background:#ffffff;
+}
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input[type="password"] {
+  padding-right: 30px; /* Ruang untuk ikon */
+}
+
+.password-wrapper .toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.card-body img {
+  max-width: 100%;
+}
+

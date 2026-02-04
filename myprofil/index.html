@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Bio | Silvergram</title>
+  <meta name="theme-color" content="#ffffff">
+  <style>
+    :root {
+      --bg: #F7F8FA;
+      --card: #FFFFFF;
+      --text: #0F172A;
+      --text-muted: #64748B;
+      --gold-500: #C7A54F;
+      --gold-400: #D6B45C;
+      --gold-100: #FFF6D9;
+      --accent: #FFE9B3; /* pastel gold */
+      --radius-xl: 24px;
+      --shadow-soft: 0 6px 24px rgba(16, 24, 40, 0.08);
+      --maxw: 420px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
+
+    .bio-app {
+      max-width: var(--maxw);
+      margin: 0 auto; padding: 16px; 
+      min-height: 100vh; display: flex; flex-direction: column; gap: 16px;
+      padding-bottom: 88px; /* space for bottom nav */
+    }
+
+    /* Header */
+    .header-card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(120% 120% at 0% 0%, var(--accent) 0%, transparent 60%),
+                  radial-gradient(120% 120% at 100% 0%, #FFECC6 0%, transparent 60%);
+      opacity: 0.65;
+    }
+    .header-content { position: relative; z-index: 1; display: grid; grid-template-columns: 72px 1fr; gap: 14px; align-items: center; }
+    .avatar {
+      width: 72px; height: 72px; border-radius: 50%; overflow: hidden; border: 2px solid var(--gold-100); box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+      background: #FFF; display: grid; place-items: center;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .avatar svg { width: 60%; height: 60%; }
+
+    .identity { display: flex; flex-direction: column; gap: 6px; }
+    .name { font-weight: 700; font-size: 1.05rem; }
+    .rating { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 0.9rem; }
+    .stars { display: inline-flex; gap: 2px; }
+    .stars svg { width: 16px; height: 16px; }
+    .cta-row { margin-top: 8px; display: flex; gap: 10px; }
+    .btn {
+      appearance: none; border: 0; border-radius: 999px; padding: 10px 14px; font-weight: 600; cursor: pointer; 
+      background: var(--text); color: #FFF; box-shadow: 0 4px 14px rgba(16,24,40,0.12); font-size: 0.95rem;
+    }
+    .btn.secondary { background: var(--gold-500); }
+
+    /* Section title */
+    .section-title { font-size: 1rem; font-weight: 700; margin: 4px 2px 8px; color: var(--text); }
+
+    /* Services */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      padding: 14px;
+    }
+    .service-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    .service-card { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; border: 1px solid rgba(199,165,79,0.22); }
+    .service-card:hover { box-shadow: 0 6px 18px rgba(16,24,40,0.08); }
+    .icon { width: 48px; height: 48px; border-radius: 12px; background: #FFF6E3; display: grid; place-items: center; }
+    .service-title { font-weight: 700; }
+    .service-desc { color: var(--text-muted); font-size: 0.9rem; }
+    .service-actions { display: flex; gap: 8px; }
+    .mini { padding: 8px 12px; font-size: 0.9rem; }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed; left: 50%; transform: translateX(-50%);
+      bottom: 12px; width: calc(var(--maxw) - 24px);
+      background: var(--card); border-radius: 18px; box-shadow: var(--shadow-soft); padding: 8px 12px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-items: center;
+      border: 1px solid rgba(199,165,79,0.18);
+    }
+    .nav-item { display: grid; place-items: center; gap: 4px; color: var(--text-muted); text-decoration: none; padding: 8px 6px; border-radius: 12px; }
+    .nav-item.active { color: var(--text); background: #FFF8EA; }
+    .nav-item svg { width: 22px; height: 22px; }
+
+    /* Utilities */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+    /* Brand header */
+    .brand-header { max-width: var(--maxw); margin: 12px auto 0; padding: 8px 16px 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .brand-header img { width: 120px; height: auto; display: block; }
+    .brand-title { font-weight: 800; color: var(--text); font-size: 1rem; }
+
+    /* Quotes slider */
+    .quotes-section { margin-top: 4px; }
+    .quotes-section .slider { position: relative; overflow: hidden; border-radius: 16px; }
+    .quotes-section .slides { display: flex; width: 100%; transition: transform 0.35s ease; }
+    .quote-slide { min-width: 100%; padding: 16px 12px 12px 44px; display: grid; gap: 10px; position: relative; }
+    .quote-text { font-size: 0.98rem; line-height: 1.6; color: var(--text); }
+    .quote-author { color: var(--text-muted); font-weight: 600; }
+    .slider-nav { display: flex; justify-content: center; gap: 6px; margin-top: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #EAD7A8; border: 1px solid #C7A54F; opacity: 0.7; }
+    .dot.active { background: #C7A54F; opacity: 1; }
+
+    /* Decorative elements for quotes */
+    .quote-bubble { position: absolute; left: 12px; top: 12px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 30% 30%, #FFF8EA 0%, #F7E8C3 100%); border: 1px solid rgba(199,165,79,0.35); box-shadow: var(--shadow-soft); }
+    .quote-bubble svg { width: 14px; height: 14px; fill: #C7A54F; }
+
+    .quote-top-icons { position: absolute; right: 10px; top: 10px; display: flex; gap: 6px; }
+    .coin { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; border: 1px solid rgba(0,0,0,0.06); box-shadow: var(--shadow-soft); }
+    .coin.gold { background: radial-gradient(circle, #FFE8A8 0%, #FFC54D 60%, #E3B45B 100%); }
+    .coin.silver { background: radial-gradient(circle, #F0F0F5 0%, #D6D7DB 60%, #B7BBC2 100%); }
+    .coin svg { width: 12px; height: 12px; opacity: 0.85; }
+
+    .sparkle { width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle, #FFF8EA 0%, #FCEFD6 100%); display: grid; place-items: center; border: 1px solid rgba(199,165,79,0.35); box-shadow: var(--shadow-soft); }
+    .sparkle svg { width: 14px; height: 14px; fill: #C7A54F; }
+  </style>
+</head>
+<body>
+  <header class="brand-header" aria-label="Header merek">
+    <img src="/upload/logoweb.png" alt="Logo EPI" width="120" height="auto" loading="lazy">
+    <div class="brand-title">EPI Channel Profil</div>
+  </header>
+  <main class="bio-app" aria-label="Halaman Bio">
+    <!-- Header -->
+    <section class="header-card" aria-label="Profil">
+      <div class="header-bg" aria-hidden="true"></div>
+      <div class="header-content">
+        <div class="avatar" id="avatar">
+          <img src="https://bisnisemasperak.com/upload/[fotoprofil]" alt="Foto Profil" loading="lazy">
+        </div>
+        <div class="identity">
+          <div class="name" id="nama">[nama]</div>
+          <div class="rating" id="rating">
+            <span class="stars" aria-label="Rating 5 bintang">
+              <svg viewBox="0 0 24 24" fill="#FFC54D" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.3l-6.18 3.25 1.18-6.88L1 8.9l6.9-1L12 1.8l4.1 6.1 6.9 1-5 4.77 1.18 6.88z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#FFC54D" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.3l-6.18 3.25 1.18-6.88L1 8.9l6.9-1L12 1.8l4.1 6.1 6.9 1-5 4.77 1.18 6.88z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#FFC54D" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.3l-6.18 3.25 1.18-6.88L1 8.9l6.9-1L12 1.8l4.1 6.1 6.9 1-5 4.77 1.18 6.88z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#FFC54D" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.3l-6.18 3.25 1.18-6.88L1 8.9l6.9-1L12 1.8l4.1 6.1 6.9 1-5 4.77 1.18 6.88z"/></svg>
+              <svg viewBox="0 0 24 24" fill="#FFC54D" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.3l-6.18 3.25 1.18-6.88L1 8.9l6.9-1L12 1.8l4.1 6.1 6.9 1-5 4.77 1.18 6.88z"/></svg>
+            </span>
+            <span id="ratingText">4.9 (124)</span>
+          </div>
+          <div class="cta-row">
+            <a id="profilLink" href="#" class="btn secondary">Lihat Profil</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Informasi Layanan -->
+    <section aria-label="Informasi Layanan" class="card">
+      <h2 class="section-title">Informasi Layanan</h2>
+      <div class="service-grid">
+        <!-- Silvergram -->
+        <div class="service-card">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="5" width="16" height="14" rx="3" fill="#FFF" stroke="#C7A54F"/>
+              <path d="M6 9h12M6 13h8" stroke="#D6B45C" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div>
+            <div class="service-title">Apa itu Silvergram?</div>
+            <div class="service-desc">Cek disini untuk tau lebih lanjut tentang silvergram.</div>
+          </div>
+          <div class="service-actions">
+            <a class="btn mini" href="/silvergram/">Buka</a>
+          </div>
+        </div>
+        <!-- Goldgram -->
+        <div class="service-card">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="9" fill="#FFF" stroke="#C7A54F"/>
+              <path d="M8 12h8M12 8v8" stroke="#D6B45C" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div>
+            <div class="service-title">Apa itu Goldgram?</div>
+            <div class="service-desc">Cari tahu lebih lanjut tentang instrumen investasi yang bikin naik kelas.</div>
+          </div>
+          <div class="service-actions">
+            <a class="btn mini" href="[kodeaff]/goldgram/">Buka</a>
+          </div>
+        </div>
+        <!-- WhatsApp -->
+        <div class="service-card">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3a9 9 0 0 0-9 9c0 1.78.52 3.44 1.42 4.84L3 21l4.28-1.13A9 9 0 1 0 12 3z" fill="#FFF" stroke="#C7A54F"/>
+              <path d="M8.8 10.2c.5 1.2 1.6 2.5 3.1 3.4 1.2.7 1.8.8 2 .7l1.3-.7c.3-.2.6-.1.8.2l.6 1c.1.3 0 .7-.3.9-.7.5-1.6.9-2.6.9-1.6 0-3.4-.7-4.8-2C7.8 13 7.1 11.7 7 10.4c0-.6.3-1.1.8-1.4l.7-.4c.3-.1.6 0 .7.3l.6 1.3z" fill="#D6B45C"/>
+            </svg>
+          </div>
+          <div>
+            <div class="service-title">Kontak WhatsApp</div>
+            <div class="service-desc"><span id="waText">[whatsapp]</span></div>
+          </div>
+          <div class="service-actions">
+            <button class="btn mini" id="copyWa">Salin</button>
+            <a class="btn mini" id="chatWa" href="#">Chat</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quotes Slider -->
+    <section class="card quotes-section" aria-label="Quotes inspiratif">
+      <div class="slider" id="quotesSlider">
+        <div class="slides">
+          <article class="quote-slide" aria-label="Slide 1">
+            <div class="quote-bubble" aria-hidden="true">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 8c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4v3h-2v-5c-1.7 0-3-1.3-3-3z"/></svg>
+            </div>
+            <div class="quote-top-icons" aria-hidden="true">
+              <div class="sparkle"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z"/></svg></div>
+              <div class="coin gold"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="5"/></svg></div>
+            </div>
+            <p class="quote-text">“Menabung emas bukan sekadar menyimpan harta, tetapi <strong>mengamankan nilai hidup</strong> dari waktu yang terus berubah. Semakin awal memulai, semakin kokoh fondasi finansialmu.”</p>
+            <p class="quote-author">— <span id="qNama1">[nama]</span>, EPI Channel Authorized</p>
+          </article>
+          <article class="quote-slide" aria-label="Slide 2">
+            <div class="quote-bubble" aria-hidden="true">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 8c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4v3h-2v-5c-1.7 0-3-1.3-3-3z"/></svg>
+            </div>
+            <div class="quote-top-icons" aria-hidden="true">
+              <div class="coin silver"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="8" height="8" rx="2"/></svg></div>
+              <div class="sparkle"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6z"/></svg></div>
+            </div>
+            <p class="quote-text">“Perak adalah logam mulia yang diam namun pasti. Dengan harga yang lebih terjangkau, ia menjadi pintu masuk bagi siapa saja yang ingin memulai <strong>perjalanan menuju kestabilan finansial</strong>.”</p>
+            <p class="quote-author">— <span id="qNama2">[nama]</span>, EPI Channel Authorized</p>
+          </article>
+          <article class="quote-slide" aria-label="Slide 3">
+            <div class="quote-bubble" aria-hidden="true">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 8c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4v3h-2v-5c-1.7 0-3-1.3-3-3z"/></svg>
+            </div>
+            <div class="quote-top-icons" aria-hidden="true">
+              <div class="coin gold"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="5"/></svg></div>
+              <div class="coin silver"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="8" height="8" rx="2"/></svg></div>
+            </div>
+            <p class="quote-text">“<strong>Bisnis emas dan perak</strong> bukan hanya tentang menjual logam mulia, tetapi tentang membuka peluang bagi banyak orang untuk lebih bijak dalam menabung, lebih aman dalam berinvestasi, dan lebih cerah dalam merencanakan masa depan.”</p>
+            <p class="quote-author">— <span id="qNama3">[nama]</span>, EPI Channel Authorized</p>
+          </article>
+        </div>
+      </div>
+      <div class="slider-nav" aria-label="Navigasi slide">
+        <button class="dot" aria-label="Slide 1" data-slide="0"></button>
+        <button class="dot" aria-label="Slide 2" data-slide="1"></button>
+        <button class="dot" aria-label="Slide 3" data-slide="2"></button>
+      </div>
+      <img src="https://bisnisemasperak.com/upload/[fotoprofil]" alt="Foto Profil" loading="lazy">
+    </section>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav" aria-label="Navigasi bawah">
+    <a class="nav-item active" href="/">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 10l9-7 9 7v9a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4H9v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9z" fill="#FFC54D"/></svg>
+      <span>Home</span>
+    </a>
+    <a class="nav-item" id="navConsult" href="#">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h16v12H7l-3 4V4z" fill="#FFF8EA" stroke="#C7A54F"/></svg>
+      <span>Konsultasi</span>
+    </a>
+    <a class="nav-item" href="[kodeaff]/silvergram/">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="5" y="4" width="14" height="16" rx="3" fill="#FFF8EA" stroke="#C7A54F"/><path d="M8 9h8M8 13h6" stroke="#D6B45C"/></svg>
+      <span>Order</span>
+    </a>
+  </nav>
+
+  <script>
+    // Simple, safe shortcode replacer (query params)
+    // ?nama=John&foto=/upload/john.jpg&whatsapp=62812xxx&profil=/profil-john
+    (function(){
+      function qs(k){ try { return new URLSearchParams(window.location.search).get(k) || ''; } catch(e){ return ''; } }
+      function sanitizeText(s){ return (s||'').replace(/[<>]/g,'').slice(0,160); }
+      function sanitizeUrl(u){ try { const a = document.createElement('a'); a.href = u; return a.href; } catch(e){ return '#'; } }
+      function cleanNumber(n){ return (n||'').replace(/[^0-9]/g,''); }
+
+      const nama = sanitizeText(qs('nama')) || '[nama]';
+      const foto = qs('fotoprofil');
+      const wa   = cleanNumber(qs('whatsapp')) || '[whatsapp]';
+      const profil = qs('profil') || '#';
+      const rating = sanitizeText(qs('rating')) || '4.9';
+      const reviews = sanitizeText(qs('reviews')) || '124';
+
+      // Fill identity
+      document.getElementById('nama').textContent = nama;
+      document.getElementById('ratingText').textContent = rating + ' (' + reviews + ')';
+
+      // Avatar
+      // Jika shortcode [fotoprofil] dari SAP sudah menyisipkan <img> ke dalam div#avatar, biarkan apa adanya.
+      // Jika query param ?fotoprofil= diberikan, kita override aman dengan <img> agar tampil bulat.
+      if(foto){
+        var a = document.getElementById('avatar');
+        const img = new Image(); img.alt = 'Foto profil ' + nama; img.src = sanitizeUrl(foto);
+        img.onload = function(){ a.innerHTML=''; a.appendChild(img); };
+      } else {
+        // Fallback: jika dalam div#avatar terdapat URL polos dari shortcode, konversi ke <img>
+        var a = document.getElementById('avatar');
+        var text = (a.textContent||'').trim();
+        if(/^https?:\/\//.test(text) || text.startsWith('/')){
+          const img = new Image(); img.alt = 'Foto profil ' + nama; img.src = sanitizeUrl(text);
+          img.onload = function(){ a.innerHTML=''; a.appendChild(img); };
+        }
+      }
+
+      // Profil link
+      document.getElementById('profilLink').href = sanitizeUrl(profil);
+
+      // WhatsApp display & actions
+      document.getElementById('waText').textContent = wa;
+      const waUrl = wa && wa !== '[whatsapp]' ? ('https://wa.me/' + wa) : '#';
+      document.getElementById('chatWa').href = waUrl;
+      document.getElementById('navConsult').href = waUrl;
+
+      document.getElementById('copyWa').addEventListener('click', function(){
+        if(!wa || wa === '[whatsapp]') return alert('Nomor WA belum diset');
+        navigator.clipboard.writeText(wa).then(function(){
+          alert('Nomor WhatsApp disalin');
+        }, function(){ alert('Gagal menyalin'); });
+      });
+
+      // Quotes slider logic
+      var current = 0;
+      var slidesEl = document.querySelector('.quotes-section .slides');
+      var dots = Array.prototype.slice.call(document.querySelectorAll('.quotes-section .dot'));
+      function go(i){ current = i; slidesEl.style.transform = 'translateX(' + (-100 * i) + '%)'; dots.forEach(function(d,idx){ d.classList.toggle('active', idx===i); }); }
+      dots.forEach(function(d){ d.addEventListener('click', function(){ go(parseInt(d.getAttribute('data-slide'),10)||0); }); });
+      go(0);
+      var timer = setInterval(function(){ go((current+1)%3); }, 6000);
+
+      // Fill [nama] in quotes
+      ['qNama1','qNama2','qNama3'].forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent = nama; });
+    })();
+  </script>
+</body>
+</html>
