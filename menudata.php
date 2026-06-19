@@ -69,7 +69,8 @@ $menu = array(
 														'jaringan' => array('Jaringan',$dashfile.'dashmemberjaringan.php',1),
 														'laporankomisi' => array('Komisi',$dashfile.'dashmemberkomisi.php',1),
 														'produklist' => array('Produk',$dashfile.'dashmemberproduk.php',1),
-														'orderanda' => array('Order Anda',$dashfile.'dashmemberorder.php',1)
+														'orderanda' => array('Order Anda',$dashfile.'dashmemberorder.php',1),
+                                                        'epichub' => array('AI CONTENT MAKER',$dashfile.'epichub_access.php',1)
 														)
 							)	
 );

@@ -16,8 +16,7 @@ if (isset($proses['order_id'])) {
 	}
 
 	$keterangan = 'Penjualan '.$proses['page_judul'];
-	$refSelf = "SALE-ORD-".$proses['order_id']."-TO-".$proses['order_idsponsor'];
-	$ins = "(".$proses['order_id'].",".$proses['order_idmember'].",".$proses['order_idsponsor'].",'".date('Y-m-d H:i:s')."',".$proses['order_hargaunik'].",0,1,'".$keterangan."',0,'SA','".$refSelf."'),";
+	$ins = "(".$proses['order_id'].",".$proses['order_idmember'].",".$proses['order_idsponsor'].",'".date('Y-m-d H:i:s')."',".$proses['order_hargaunik'].",0,1,'".$keterangan."',0,'SA'),";
 	# Dapatkan data upline
 	if (!empty($proses['sp_network'])) {
 		$network = str_replace('][', ',', $proses['sp_network']);
@@ -52,8 +51,7 @@ if (isset($proses['order_id'])) {
                     if ($kredit > 0) {
                         $ketType = ($komisiType === 'percent') ? (rtrim(rtrim(number_format($baseVal,2,'.',''), '0'),'.').'%') : ('Rp '.number_format((int)$baseVal));
                         $keterangan = 'Komisi Penjualan '.$proses['page_judul'].' ['.$ketType.' dari Rp '.number_format($hargaOrder).', nominal Rp '.number_format($kredit).' L'.$lvl.']';
-                        $ref = "COMM-ORD-".$proses['order_id']."-TO-".$upline['mem_id']."-LVL-".$lvl;
-                        $ins .= "(".$proses['order_id'].",".$proses['order_idmember'].",".$upline['mem_id'].",'".date('Y-m-d H:i:s')."',".$kredit.",0,2,'".$keterangan."',".$lvl.",'SA','".$ref."'),";
+                        $ins .= "(".$proses['order_id'].",".$proses['order_idmember'].",".$upline['mem_id'].",'".date('Y-m-d H:i:s')."',".$kredit.",0,2,'".$keterangan."',".$lvl.",'SA'),";
                     }
                     $lvl++;
                 }           
@@ -77,13 +75,12 @@ if (isset($proses['order_id'])) {
             if ($ckredit > 0) {
                 $ketType = ($ctype === 'percent') ? (rtrim(rtrim(number_format($cval,2,'.',''), '0'),'.').'%') : ('Rp '.number_format((int)$cval));
                 $keterangan = 'Komisi Kontributor '.$proses['page_judul'].' ['.$ketType.' dari Rp '.number_format($hargaOrder).', nominal Rp '.number_format($ckredit).']';
-                $ref = "CONTRIB-ORD-".$proses['order_id']."-TO-".$contrib['member_id'];
-                $ins .= "(".$proses['order_id'].",".$proses['order_idmember'].",".(int)$contrib['member_id'].",'".date('Y-m-d H:i:s')."',".$ckredit.",0,3,'".$keterangan."',0,'CONTRIB','".$ref."'),";
+                $ins .= "(".$proses['order_id'].",".$proses['order_idmember'].",".(int)$contrib['member_id'].",'".date('Y-m-d H:i:s')."',".$ckredit.",0,3,'".$keterangan."',0,'CONTRIB'),";
             }
         }
     }
 	
-	$cek = db_query("INSERT IGNORE INTO `sa_laporan` (`lap_idorder`,`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_level`,`lap_app`,`lap_reference`) 
+	$cek = db_query("INSERT INTO `sa_laporan` (`lap_idorder`,`lap_idmember`,`lap_idsponsor`,`lap_tanggal`,`lap_masuk`,`lap_keluar`,`lap_code`,`lap_keterangan`,`lap_level`,`lap_app`) 
 		VALUES ".substr($ins,0,-1));
 	if ($cek === false) {
 		echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">

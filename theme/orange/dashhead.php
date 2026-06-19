@@ -16,20 +16,13 @@
   <?php 
   echo $head['scripthead']??='';
   $container = $head['container'] ??= 'container';
-  $homeurl = (isset($slug[1]) && $slug[1] == 'dashboard') ? ($weburl.'dashboard') : $weburl;
-  $logoSrc = function_exists('epi_resolve_logo_src') ? epi_resolve_logo_src($weburl, isset($settings)?$settings:getsettings(), $settings['logoweb'] ?? null) : ($weburl.'img/simpleaff-logo.png');
   ?>
-  <style>
-    .site-logo{max-height:60px;height:auto;width:auto;transition:filter .2s ease}
-    @media (max-width:576px){.site-logo{max-height:48px}}
-    .site-logo:hover{filter:brightness(0.95)}
-  </style>
 </head>
 
 <body>
 <nav class="navbar sticky-top navbar-expand-md bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="<?= $homeurl; ?>"><img src="<?= htmlspecialchars($logoSrc, ENT_QUOTES);?>" alt="EPI Logo" class="site-logo"></a>
+    <a class="navbar-brand" href="#"><img src="<?= $weburl.$logoweb;?>" alt="Dashboard" height="45"></a>
     <button class="navbar-toggler"  type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

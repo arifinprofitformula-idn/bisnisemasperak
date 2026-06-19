@@ -131,7 +131,7 @@ else {
 $format = isset($_GET['format']) ? strtolower(trim((string)$_GET['format'])) : 'xlsx';
 if (!in_array($format, array('xlsx','csv'), true)) { $format = 'xlsx'; }
 
-$q = "SELECT `sa_laporan`.*,`sa_member`.`mem_nama` FROM `sa_laporan` LEFT JOIN `sa_member` ON `sa_member`.`mem_id`=`sa_laporan`.`lap_idmember` WHERE MONTH(`lap_tanggal`)=".(int)$bulan." AND YEAR(`lap_tanggal`)=".(int)$tahun." AND `lap_code`=1 ORDER BY `lap_tanggal`";
+$q = "SELECT `sa_laporan`.*,`sa_member`.`mem_nama` FROM `sa_laporan` LEFT JOIN `sa_member` ON `sa_member`.`mem_id`=`sa_laporan`.`lap_idmember` WHERE MONTH(`lap_tanggal`)=".(int)$bulan." AND YEAR(`lap_tanggal`)=".(int)$tahun." AND `lap_code` IN (2, 3) ORDER BY `lap_tanggal`";
 $rows = db_select($q);
 $data = array(); $saldo = 0;
 if (is_array($rows)) {

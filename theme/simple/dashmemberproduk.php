@@ -62,6 +62,8 @@ if (isset($_GET['cancel']) && is_numeric($_GET['cancel'])) {
 			foreach ($saleRows as $sr) { $produksale[(int)$sr['order_idproduk']] = (int)$sr['jmlsale']; }
 		}
         $order = db_select("SELECT * FROM `sa_order` WHERE `order_idmember`=".$datamember['mem_id']." AND `order_status`=1");
+        // Check Admin Bypass (Role >= 5)
+        $isAdminBypass = (isset($datamember['mem_role']) && (int)$datamember['mem_role'] >= 5);
         if (count($order) > 0) {
             foreach ($order as $order) {
                 $orderlist[$order['order_idproduk']] = 1;
@@ -196,7 +198,7 @@ if (isset($_GET['cancel']) && is_numeric($_GET['cancel'])) {
             echo '</span></div></td>';
 
             echo '<td class="text-end">';
-            if (isset($orderlist[$data['page_id']]) || ((isset($data['pro_free_access']) ? $data['pro_free_access'] : 0) == 1)) {
+            if ($isAdminBypass || isset($orderlist[$data['page_id']]) || ((isset($data['pro_free_access']) ? $data['pro_free_access'] : 0) == 1)) {
                 echo '<a href="'.$weburl.'dashboard/akses/'.$data['page_url'].'" class="btn btn-sm member-order-btn" target="_blank"><span class="btn-icon" aria-hidden="true">🔑</span><span class="btn-text">Akses</span></a>'; 
             } elseif ($data['pro_status'] == 1) {
                 $pid = (int)$data['page_id'];

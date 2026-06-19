@@ -5,17 +5,12 @@ if (isset($datamember['mem_id'])) {
 	if (isset($slug[3]) && !empty($slug[3])) {
 		$produk = db_row("SELECT * FROM `sa_page` WHERE `page_url`='".cek($slug[3])."'");
 		$hargaTampil = (isset($produk['pro_harga_display']) && $produk['pro_harga_display'] !== '' ? $produk['pro_harga_display'] : $produk['pro_harga']);
-		$freeOrder = db_row("SELECT `order_id`,`order_status` FROM `sa_order` WHERE `order_idproduk`=".(int)$produk['page_id']." AND `order_idmember`=".(int)$datamember['mem_id']." AND (`order_status`=1 OR (`order_hargaunik`=0 AND `order_trx`='free')) ORDER BY `order_id` DESC LIMIT 1");
-		if ( ($hargaTampil == 0)
+        // Check Admin Bypass (Role >= 5)
+        $isAdminBypass = (isset($datamember['mem_role']) && (int)$datamember['mem_role'] >= 5);
+		if ( $isAdminBypass
+            || ($hargaTampil == 0)
 			|| ((isset($produk['pro_free_access']) && $produk['pro_free_access'] == 1))
-			|| (isset($freeOrder['order_id']))
 			|| (db_var("SELECT `order_status` FROM `sa_order` WHERE `order_idproduk`=".$produk['page_id']." AND `order_idmember`=".$datamember['mem_id']) == 1) ) {
-			if (isset($freeOrder['order_id']) && (int)($freeOrder['order_status'] ?? 0) === 0) {
-				$updates = "`order_status`=1, `order_trx`='free', `order_hargaunik`=0";
-				if (db_var("SHOW COLUMNS FROM `sa_order` LIKE 'order_price_display'")) { $updates .= ", `order_price_display`=0"; }
-				if (db_var("SHOW COLUMNS FROM `sa_order` LIKE 'order_discount'")) { $updates .= ", `order_discount`=0"; }
-				db_query("UPDATE `sa_order` SET ".$updates." WHERE `order_id`=".(int)$freeOrder['order_id']);
-			}
 			// Jika produk gratis atau free-access, pastikan membuat order otomatis (untuk konsistensi dan notifikasi)
 			if (($hargaTampil == 0) || (isset($produk['pro_free_access']) && $produk['pro_free_access'] == 1)) {
 				$cekOrder = db_row("SELECT * FROM `sa_order` WHERE `order_idproduk`=".$produk['page_id']." AND `order_idmember`=".$datamember['mem_id']);

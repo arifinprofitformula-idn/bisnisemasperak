@@ -519,6 +519,7 @@ function getData($url) {
         $data = false;
     }
 
+    curl_close($curl);
     return $data;
 }
 

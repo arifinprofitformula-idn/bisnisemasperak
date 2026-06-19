@@ -93,6 +93,7 @@
       background: var(--card); border-radius: 18px; box-shadow: var(--shadow-soft); padding: 8px 12px;
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; align-items: center;
       border: 1px solid rgba(199,165,79,0.18);
+      z-index: 20;
     }
     .nav-item { display: grid; place-items: center; gap: 4px; color: var(--text-muted); text-decoration: none; padding: 8px 6px; border-radius: 12px; }
     .nav-item.active { color: var(--text); background: #FFF8EA; }
@@ -129,6 +130,69 @@
 
     .sparkle { width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle, #FFF8EA 0%, #FCEFD6 100%); display: grid; place-items: center; border: 1px solid rgba(199,165,79,0.35); box-shadow: var(--shadow-soft); }
     .sparkle svg { width: 14px; height: 14px; fill: #C7A54F; }
+
+    /* Login CTA */
+    .login-cta {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(199,165,79,0.25);
+      background: linear-gradient(135deg, #FFF9EC 0%, #FFF1CC 52%, #FFE2A3 100%);
+      z-index: 1;
+    }
+    .login-cta::before {
+      content: "";
+      position: absolute;
+      inset: -30% auto auto -10%;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 72%);
+      pointer-events: none;
+    }
+    .login-cta-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 12px;
+      text-align: center;
+    }
+    .login-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #6A4A00;
+    }
+    .login-desc {
+      margin: 0;
+      color: #7C6640;
+      line-height: 1.55;
+      font-size: 0.94rem;
+    }
+    .btn-login {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      text-decoration: none;
+      color: #2E2100;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      background: linear-gradient(135deg, #FFFDF6 0%, #FFE7A6 40%, #D4AF37 100%);
+      box-shadow: 0 10px 24px rgba(199, 165, 79, 0.32), inset 0 1px 0 rgba(255,255,255,0.75);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(199, 165, 79, 0.38), inset 0 1px 0 rgba(255,255,255,0.85);
+    }
+    .btn-login svg {
+      width: 20px;
+      height: 20px;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+    }
   </style>
 </head>
 <body>
@@ -261,6 +325,21 @@
         <button class="dot" aria-label="Slide 1" data-slide="0"></button>
         <button class="dot" aria-label="Slide 2" data-slide="1"></button>
         <button class="dot" aria-label="Slide 3" data-slide="2"></button>
+      </div>
+    </section>
+
+    <section class="card login-cta" aria-label="Login member">
+      <div class="login-cta-content">
+        <h2 class="login-title">Masuk ke Member Area</h2>
+        <p class="login-desc">Login untuk mengakses dashboard member EPIC Hub, melihat informasi akun, dan melanjutkan aktivitas Anda dengan lebih cepat.</p>
+        <a class="btn-login" href="/login">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M14 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3" fill="none" stroke="#6A4A00" stroke-width="1.8"/>
+            <path d="M10 8l4 4-4 4" fill="none" stroke="#6A4A00" stroke-width="1.8"/>
+            <path d="M4 12h10" fill="none" stroke="#6A4A00" stroke-width="1.8"/>
+          </svg>
+          <span>Login Sekarang</span>
+        </a>
       </div>
     </section>
   </main>

@@ -176,6 +176,29 @@ if ($theslug != '' && count($_GET) == 0) {
 		    }
 		  }	
 			
+          
+          $firstProductIdForLog = 0;
+          if (!empty($data['art_product'])) {
+            $pidsRaw = array_filter(explode(',', (string)$data['art_product']), 'strlen');
+            foreach ($pidsRaw as $rp) { if (is_numeric($rp)) { $firstProductIdForLog = (int)$rp; break; } }
+          }
+          $articleIdForLog = (int)$data['art_id'];
+          $showartikel = (function($html, $articleId, $productId){
+            $replaced = $html;
+            $replaced = preg_replace_callback('/<iframe[^>]*src="https?:\/\/(?:www\\.)?youtube\\.com\/embed\/([A-Za-z0-9_-]{11})[^"]*"[^>]*><\/iframe>/i', function($m) use ($articleId, $productId) {
+                $vid = $m[1];
+                return '<div class="yt-embed" data-video-id="'.$vid.'" data-article-id="'.$articleId.'" data-product-id="'.$productId.'"><div class="yt-thumb" role="button" tabindex="0" aria-label="Putar video" style="background-image:url(https://i.ytimg.com/vi/'.$vid.'/hqdefault.jpg)"><div class="yt-play"></div></div><div class="yt-error d-none">Video tidak dapat dimuat.</div></div>';
+            }, $replaced);
+            $replaced = preg_replace_callback('/https?:\/\/(?:www\\.)?(?:youtube\\.com\/watch\\?v=|youtu\\.be\/)([A-Za-z0-9_-]{11})[^\\s<]*/i', function($m) use ($articleId, $productId) {
+                $vid = $m[1];
+                return '<div class="yt-embed" data-video-id="'.$vid.'" data-article-id="'.$articleId.'" data-product-id="'.$productId.'"><div class="yt-thumb" role="button" tabindex="0" aria-label="Putar video" style="background-image:url(https://i.ytimg.com/vi/'.$vid.'/hqdefault.jpg)"><div class="yt-play"></div></div><div class="yt-error d-none">Video tidak dapat dimuat.</div></div>';
+            }, $replaced);
+            $replaced = preg_replace_callback('/<a[^>]*href="https?:\/\/(?:www\\.)?(?:youtube\\.com\/watch\\?v=|youtu\\.be\/)([A-Za-z0-9_-]{11})[^"]*"[^>]*>.*?<\/a>/i', function($m) use ($articleId, $productId){
+                $vid = $m[1];
+                return '<div class="yt-embed" data-video-id="'.$vid.'" data-article-id="'.$articleId.'" data-product-id="'.$productId.'"><div class="yt-thumb" role="button" tabindex="0" aria-label="Putar video" style="background-image:url(https://i.ytimg.com/vi/'.$vid.'/hqdefault.jpg)"><div class="yt-play"></div></div><div class="yt-error d-none">Video tidak dapat dimuat.</div></div>';
+            }, $replaced);
+            return $replaced;
+          })($showartikel, $articleIdForLog, $firstProductIdForLog);
 		} else {
 			# Munculkan halaman 404
 			$showfile = 'art_404.php';
@@ -733,6 +756,86 @@ if (!isset($_GET['add']) && !isset($_GET['edit'])) {
     </script>
     ';
 }
+
+$footer['scriptfoot'] .= '
+<style>
+  .yt-embed{position:relative;width:100%;max-width:960px;margin:1rem auto;border-radius:12px;overflow:hidden;background:#000}
+  .yt-embed::before{content:"";display:block;padding-top:56.25%}
+  .yt-embed .yt-thumb{position:absolute;inset:0;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .yt-embed .yt-play{width:68px;height:48px;background:rgba(255,255,255,.9);border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.25);position:relative}
+  .yt-embed .yt-play::after{content:"";border-style:solid;border-width:10px 0 10px 16px;border-color:transparent transparent transparent #000;position:absolute;left:26px;top:14px}
+  .yt-embed .yt-error{position:absolute;left:0;right:0;bottom:0;background:#111;color:#fff;padding:.5rem .75rem;font-size:.875rem}
+  .d-none{display:none}
+</style>
+<script>
+(function(){
+  if (window.__ytIframeInit) return; window.__ytIframeInit = true;
+  var apiReady = false, apiLoading = false, pendingInit = [];
+  function loadApi(cb){ if(apiReady) return cb(); if(apiLoading){ pendingInit.push(cb); return; } apiLoading=true; var s=document.createElement("script"); s.src="https://www.youtube.com/iframe_api"; s.async=true; window.onYouTubeIframeAPIReady=function(){ apiReady=true; cb(); pendingInit.forEach(function(f){try{f();}catch(e){}}); pendingInit=[]; }; document.head.appendChild(s); }
+  function initPlayer(el){
+    var vid = el.getAttribute("data-video-id");
+    var aid = el.getAttribute("data-article-id")||"0";
+    var pid = el.getAttribute("data-product-id")||"0";
+    var box = document.createElement("div"); box.style.position="absolute"; box.style.inset="0"; el.appendChild(box);
+    try {
+      var p = new YT.Player(box,{ videoId: vid, playerVars:{ rel:0, modestbranding:1, controls:1, fs:1, playsinline:1, autoplay:1, disablekb:1, iv_load_policy:3, cc_load_policy:0, origin: (location && location.origin) ? location.origin : undefined }, events:{
+        onReady:function(){
+          var ifr = p.getIframe(); if (ifr) { try { ifr.setAttribute("allow","autoplay; fullscreen; picture-in-picture"); ifr.setAttribute("sandbox","allow-scripts allow-same-origin"); } catch(e){} }
+          var triedMuted = false;
+          function tryPlay(){
+            try {
+              p.playVideo();
+              setTimeout(function(){
+                var st = 0; try { st = p.getPlayerState(); } catch(e){}
+                if (st !== 1) {
+                  if (!triedMuted) {
+                    triedMuted = true;
+                    try {
+                      p.mute(); p.playVideo();
+                      setTimeout(function(){
+                        var st2 = 0; try { st2 = p.getPlayerState(); } catch(e){}
+                        if (st2 === 1) { try { p.unMute(); } catch(e){} } else { showAutoplayHint(el); }
+                      }, 900);
+                    } catch(e){ showAutoplayHint(el); }
+                  } else {
+                    showAutoplayHint(el);
+                  }
+                }
+              }, 700);
+            } catch(e){ showAutoplayHint(el); }
+          }
+          tryPlay();
+          logAction("PLAY_READY", vid, aid, pid);
+        },
+        onError:function(){ showError(el); logAction("PLAY_ERROR", vid, aid, pid); },
+        onStateChange:function(e){ if (e && e.data === 1) { logAction("PLAYING", vid, aid, pid); } }
+      }});
+    } catch(e){ showError(el); logAction("PLAY_ERROR_INIT", vid, aid, pid); }
+  }
+  function showAutoplayHint(el){ var er = el.querySelector(".yt-error"); if(er){ er.classList.remove("d-none"); er.textContent = "Autoplay diblokir, silakan tekan tombol play pada player."; } }
+  function showError(el){ var er = el.querySelector(".yt-error"); if(er){ er.classList.remove("d-none"); er.textContent = "Video tidak dapat dimuat atau koneksi bermasalah."; } }
+  function logAction(act, vid, aid, pid){
+    try {
+      fetch("'.$weburl.'api/video_log.php",{ method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify({ action: act, video_id: vid, article_id: aid, product_id: pid }) }).catch(function(){});
+    } catch(e){}
+  }
+  function attach(){
+    var items = document.querySelectorAll(".yt-embed");
+    items.forEach(function(el){
+      var th = el.querySelector(".yt-thumb");
+      var started = false;
+      function start(){ if(started) return; started=true; if (th) { th.style.display="none"; } loadApi(function(){ initPlayer(el); logAction("PLAY_START", el.getAttribute("data-video-id"), el.getAttribute("data-article-id")||"0", el.getAttribute("data-product-id")||"0"); }); }
+      if (th){ th.addEventListener("click", start); th.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); start(); } }); }
+      if ("IntersectionObserver" in window){
+        var io = new IntersectionObserver(function(entries){ entries.forEach(function(ent){ if(ent.isIntersecting){ if(!apiLoading && !apiReady){ loadApi(function(){}); } } }); },{ rootMargin:"200px" });
+        io.observe(el);
+      } else { setTimeout(function(){ loadApi(function(){}); }, 1000); }
+    });
+  }
+  if (document.readyState === "loading"){ document.addEventListener("DOMContentLoaded", attach); } else { attach(); }
+})();
+</script>
+';
 
 showfooter($footer);
 ?>

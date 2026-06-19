@@ -11,10 +11,334 @@ if ($pph < 0) { $pph = 0.0; }
 if ($pph > 100) { $pph = 100.0; }
 $pphSql = number_format($pph, 2, '.', '');
 
+// CSS Global
+echo '<style>'
+  .'.btn-apply{ display:inline-block; padding:.5rem .9rem; border:none; border-radius:.5rem; background:#D4AF37; color:#0B0B0B; text-decoration:none; font-weight:600; box-shadow:0 .3rem 0 #b18c2c, 0 .3rem .6rem rgba(0,0,0,.25); transform:translateY(0); transition:transform .1s ease, box-shadow .1s ease, filter .15s ease; }'
+  .'.btn-apply:hover{ filter:brightness(.97); }'
+  .'.btn-apply:active{ transform:translateY(.25rem); box-shadow:0 .05rem 0 #b18c2c, 0 .1rem .3rem rgba(0,0,0,.25); }'
+  .'.btn-apply:focus-visible{ outline:2px solid #0B0B0B; outline-offset:2px; }'
+  .'.btn-followup{ display:inline-flex; align-items:center; justify-content:center; padding:.35rem .6rem; border:none; border-radius:.5rem; background:#D4AF37; color:#0B0B0B; text-decoration:none; font-weight:600; font-size:.875rem; box-shadow:0 .2rem 0 #b18c2c, 0 .2rem .45rem rgba(0,0,0,.2); transform:translateY(0); transition:transform .1s ease, box-shadow .1s ease, filter .15s ease; white-space:nowrap; }'
+  .'.btn-followup:hover{ filter:brightness(.97); }'
+  .'.btn-followup:active{ transform:translateY(.2rem); box-shadow:0 .05rem 0 #b18c2c, 0 .1rem .3rem rgba(0,0,0,.2); }'
+  .'.btn-followup:focus-visible{ outline:2px solid #0B0B0B; outline-offset:2px; }'
+  .'.btn-followup.disabled, .btn-followup[aria-disabled="true"]{ opacity:.6; pointer-events:none; }'
+  .'.btn-detail{ display:inline-flex; align-items:center; justify-content:center; padding:.35rem .6rem; border:none; border-radius:.5rem; background:#0d6efd; color:#fff; text-decoration:none; font-weight:600; font-size:.875rem; box-shadow:0 .2rem 0 #0a58ca, 0 .2rem .45rem rgba(0,0,0,.2); transform:translateY(0); transition:transform .1s ease, box-shadow .1s ease, filter .15s ease; white-space:nowrap; margin-right: 5px; }'
+  .'.btn-detail:hover{ filter:brightness(.95); color:#fff; }'
+  .'.btn-detail:active{ transform:translateY(.2rem); box-shadow:0 .05rem 0 #0a58ca, 0 .1rem .3rem rgba(0,0,0,.2); }'
+  .'.komisi-actionbar{ gap:10px; }'
+  .'.komisi-actionbar .btn-apply{ width:100%; text-align:center; }'
+  .'@media (min-width: 576px){ .komisi-actionbar .btn-apply{ width:auto; } }'
+  .'.export-indicator{ font-size:.85rem; padding:.2rem .5rem; border-radius:.35rem; background:#F8F8F8; color:#0B0B0B; border:1px solid #ddd; }'
+  .'.export-indicator.filtered{ background:#fff3cd; color:#664d03; border-color:#ffecb5; }'
+  .'/* Container Table dengan Freeze Header & Column */'
+  .'.table-freeze-container { max-height: 75vh; overflow: auto; position: relative; border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 .125rem .25rem rgba(0,0,0,.075); background-color: #fff; scroll-behavior: smooth; }'
+  .'.table-freeze-container .table-bordered { border: 0; }'
+  .'.table-freeze-container thead th { position: sticky; top: 0; z-index: 20; background-color: #e2e3e5; color: #383d41; box-shadow: inset 0 -2px 0 #adb5bd; border-bottom: 0; text-align: center; vertical-align: middle; }'
+  .'.table-freeze-container tbody td.sticky-col { position: sticky; left: 0; z-index: 10; background-color: #fff; border-right: 2px solid #dee2e6; transition: background-color 0.15s ease-in-out; }'
+  .'.table-freeze-container tbody tr:hover td.sticky-col { background-color: #ececec; }'
+  .'.table-freeze-container thead th.sticky-col { left: 0; z-index: 30; background-color: #e2e3e5; border-right: 2px solid #dee2e6; }'
+  .'</style>';
+
+// ============================================================
+// LOGIC: DETAIL MEMBER (Laporan Keuangan Per User)
+// ============================================================
+if (isset($_GET['detil']) && is_numeric($_GET['detil'])) {
+    $detilId = (int)$_GET['detil'];
+    $memberData = db_row("SELECT * FROM `sa_member` WHERE `mem_id`='$detilId'");
+    
+    if (!$memberData) {
+        echo '<div class="alert alert-danger">Member tidak ditemukan.</div>';
+        echo '<a href="?q=" class="btn btn-secondary">&laquo; Kembali</a>';
+        showfooter();
+        exit();
+    }
+
+    // Filter Tanggal
+    $startDate = isset($_GET['start']) ? trim($_GET['start']) : date('Y-m-01');
+    $endDate = isset($_GET['end']) ? trim($_GET['end']) : date('Y-m-d');
+    
+    // Validasi Tanggal
+    if (!strtotime($startDate)) $startDate = date('Y-m-01');
+    if (!strtotime($endDate)) $endDate = date('Y-m-d');
+
+    // Export Logic (Detail)
+    $export = isset($_GET['export']) ? strtolower(trim((string)$_GET['export'])) : '';
+    if (in_array($export, array('csv','xlsx'), true)) {
+        $rowsExport = array();
+        $rowsExport[] = array('ID Transaksi','Tanggal','Keterangan','Masuk (Komisi)','Keluar (Potongan)','Saldo','Jenis');
+
+        $sqlAll = "SELECT * FROM `sa_laporan` WHERE `lap_idsponsor`='$detilId' AND `lap_tanggal` BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:59' AND `lap_code` IN (2, 3) ORDER BY `lap_tanggal` ASC";
+        $allTrans = db_select($sqlAll);
+        $runningBalance = 0;
+        
+        if ($allTrans) {
+            foreach ($allTrans as $r) {
+                $masuk = (int)$r['lap_masuk'];
+                $keluar = (int)$r['lap_keluar'];
+                $runningBalance += ($masuk - $keluar);
+                $jenis = ($r['lap_code'] == 2) ? 'Sponsor' : (($r['lap_code'] == 3) ? 'Kontributor' : 'Lainnya');
+                
+                $rowsExport[] = array(
+                    $r['lap_id'],
+                    $r['lap_tanggal'],
+                    $r['lap_keterangan'],
+                    $masuk,
+                    $keluar,
+                    $runningBalance,
+                    $jenis
+                );
+            }
+        }
+
+        $fnameBase = 'Laporan_Keuangan_'.$memberData['mem_nama'].'_'.$startDate.'_to_'.$endDate;
+        if (function_exists('ob_get_level') && ob_get_level() > 0) { @ob_clean(); }
+        @ini_set('display_errors', '0');
+
+        if ($export === 'csv') {
+            header('Content-Type: text/csv; charset=UTF-8');
+            header('Content-Disposition: attachment; filename="'.$fnameBase.'.csv"');
+            header('Cache-Control: no-store, max-age=0');
+            $out = fopen('php://output', 'w');
+            fwrite($out, "\xEF\xBB\xBF");
+            foreach ($rowsExport as $line) { fputcsv($out, $line); }
+            fclose($out);
+            exit;
+        }
+
+        // Excel
+        $clazzSimple = 'SimpleXLSXGen';
+        $clazzNs = '\\Shuchkin\\XLSXGen';
+        @include_once dirname(__DIR__, 2).DIRECTORY_SEPARATOR.'xlsxgen.php';
+        if (class_exists($clazzSimple) || class_exists($clazzNs)) {
+            $cls = class_exists($clazzSimple) ? $clazzSimple : $clazzNs;
+            $xlsx = $cls::fromArray($rowsExport);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment; filename="'.$fnameBase.'.xlsx"');
+            $xlsx->saveAs('php://output');
+            exit;
+        }
+    }
+
+    // Pagination
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    if ($page < 1) $page = 1;
+    $limit = 50;
+    $offset = ($page - 1) * $limit;
+
+    // Query Summary
+            // Requirements:
+            // 1. Income: Only Sponsor (Code 2) and Contributor (Code 3). Explicitly exclude Sales.
+            // 2. Expense: Include Payouts and Tax (which are recorded with Code 2/3 in sa_laporan).
+            $filterCode = " AND `lap_code` IN (2, 3) ";
+            
+            $sumSql = "SELECT SUM(`lap_masuk`) as total_masuk, SUM(`lap_keluar`) as total_keluar FROM `sa_laporan` WHERE `lap_idsponsor`='$detilId' AND `lap_tanggal` BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:59' $filterCode";
+            $summary = db_row($sumSql);
+            $totalMasuk = (int)($summary['total_masuk'] ?? 0);
+            $totalKeluar = (int)($summary['total_keluar'] ?? 0);
+            $netIncome = $totalMasuk - $totalKeluar;
+
+            // Query Chart Data (Daily)
+            $chartSql = "SELECT DATE(`lap_tanggal`) as tgl, SUM(`lap_masuk`) as income, SUM(`lap_keluar`) as expense FROM `sa_laporan` WHERE `lap_idsponsor`='$detilId' AND `lap_tanggal` BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:59' $filterCode GROUP BY DATE(`lap_tanggal`) ORDER BY tgl ASC";
+            $chartRows = db_select($chartSql);
+            $chartLabels = [];
+            $chartIncome = [];
+            $chartExpense = [];
+            if ($chartRows) {
+                foreach ($chartRows as $c) {
+                    $chartLabels[] = date('d/m', strtotime($c['tgl']));
+                    $chartIncome[] = (int)$c['income'];
+                    $chartExpense[] = (int)$c['expense'];
+                }
+            }
+
+            // Query Table Data
+            $countSql = "SELECT COUNT(*) FROM `sa_laporan` WHERE `lap_idsponsor`='$detilId' AND `lap_tanggal` BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:59' $filterCode";
+            $totalRows = (int)db_var($countSql);
+            $totalPages = ceil($totalRows / $limit);
+            
+            $listSql = "SELECT * FROM `sa_laporan` WHERE `lap_idsponsor`='$detilId' AND `lap_tanggal` BETWEEN '$startDate 00:00:00' AND '$endDate 23:59:59' $filterCode ORDER BY `lap_tanggal` DESC LIMIT $limit OFFSET $offset";
+            $transactions = db_select($listSql);
+
+    // Render UI Detail
+    echo '<div class="d-flex justify-content-between align-items-center mb-3">';
+    echo '<div>';
+    echo '<a href="?q=" class="btn btn-secondary btn-sm mb-2"><i class="fas fa-arrow-left"></i> Kembali</a>';
+    echo '<h4 class="mb-0">Laporan Keuangan: '.htmlspecialchars($memberData['mem_nama']).' (ID: '.$detilId.')</h4>';
+    echo '<small class="text-muted">Periode: '.date('d M Y', strtotime($startDate)).' - '.date('d M Y', strtotime($endDate)).'</small>';
+    echo '</div>';
+    echo '</div>';
+
+    // Filter & Export Form
+    echo '<form method="get" class="card mb-4 shadow-sm">';
+    echo '<input type="hidden" name="detil" value="'.$detilId.'">';
+    echo '<div class="card-body">';
+    echo '<div class="row g-3 align-items-end">';
+    echo '<div class="col-md-3">';
+    echo '<label class="form-label">Tanggal Mulai</label>';
+    echo '<input type="date" class="form-control" name="start" value="'.$startDate.'">';
+    echo '</div>';
+    echo '<div class="col-md-3">';
+    echo '<label class="form-label">Tanggal Akhir</label>';
+    echo '<input type="date" class="form-control" name="end" value="'.$endDate.'">';
+    echo '</div>';
+    echo '<div class="col-md-6 d-flex gap-2">';
+    echo '<button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Filter</button>';
+    echo '<button type="submit" name="export" value="xlsx" class="btn btn-success"><i class="fas fa-file-excel"></i> Export Excel</button>';
+    echo '<button type="submit" name="export" value="csv" class="btn btn-outline-secondary"><i class="fas fa-file-csv"></i> CSV</button>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+    echo '</form>';
+
+    // Summary Cards
+    echo '<div class="row g-3 mb-4">';
+    echo '<div class="col-md-4">';
+    echo '<div class="card bg-success text-white h-100 shadow-sm">';
+    echo '<div class="card-body">';
+    echo '<h6 class="card-title">Total Komisi (Masuk)</h6>';
+    echo '<h3 class="mb-0">Rp '.number_format($totalMasuk, 0, ',', '.').'</h3>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+    echo '<div class="col-md-4">';
+    echo '<div class="card bg-danger text-white h-100 shadow-sm">';
+    echo '<div class="card-body">';
+    echo '<h6 class="card-title">Total Potongan (Keluar)</h6>';
+    echo '<h3 class="mb-0">Rp '.number_format($totalKeluar, 0, ',', '.').'</h3>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+    echo '<div class="col-md-4">';
+    echo '<div class="card bg-info text-white h-100 shadow-sm">';
+    echo '<div class="card-body">';
+    echo '<h6 class="card-title">Pendapatan Bersih</h6>';
+    echo '<h3 class="mb-0">Rp '.number_format($netIncome, 0, ',', '.').'</h3>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
+
+    // Chart
+    echo '<div class="card mb-4 shadow-sm">';
+    echo '<div class="card-header fw-bold">Grafik Tren Keuangan</div>';
+    echo '<div class="card-body">';
+    echo '<canvas id="financeChart" style="max-height: 300px;"></canvas>';
+    echo '</div>';
+    echo '</div>';
+
+    // Transaction Table
+    echo '<div class="card shadow-sm">';
+    echo '<div class="card-header fw-bold">Rincian Transaksi</div>';
+    echo '<div class="card-body p-0">';
+    echo '<div class="table-freeze-container" style="max-height: 500px;">';
+    echo '<table class="table table-hover table-bordered mb-0 align-middle table-striped">';
+    echo '<thead class="table-light">';
+    echo '<tr>';
+    echo '<th class="sticky-col text-center" style="width: 80px;">ID</th>';
+    echo '<th>Tanggal</th>';
+    echo '<th>Keterangan</th>';
+    echo '<th>Jenis</th>';
+    echo '<th class="text-end text-success">Masuk</th>';
+    echo '<th class="text-end text-danger">Keluar</th>';
+    echo '</tr>';
+    echo '</thead>';
+    echo '<tbody>';
+
+    if (!$transactions) {
+        echo '<tr><td colspan="6" class="text-center py-4 text-muted">Tidak ada data transaksi pada periode ini.</td></tr>';
+    } else {
+        foreach ($transactions as $t) {
+            $jenisLabel = ($t['lap_code'] == 2) ? '<span class="badge bg-primary">Sponsor</span>' : (($t['lap_code'] == 3) ? '<span class="badge bg-warning text-dark">Kontributor</span>' : '<span class="badge bg-secondary">Lainnya</span>');
+            echo '<tr>';
+            echo '<td class="sticky-col text-center">'.$t['lap_id'].'</td>';
+            echo '<td>'.date('d/m/Y H:i', strtotime($t['lap_tanggal'])).'</td>';
+            echo '<td>'.htmlspecialchars($t['lap_keterangan']).'</td>';
+            echo '<td>'.$jenisLabel.'</td>';
+            echo '<td class="text-end text-success">Rp '.number_format($t['lap_masuk'], 0, ',', '.').'</td>';
+            echo '<td class="text-end text-danger">Rp '.number_format($t['lap_keluar'], 0, ',', '.').'</td>';
+            echo '</tr>';
+        }
+    }
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
+    
+    // Pagination
+    if ($totalPages > 1) {
+        echo '<div class="p-3">';
+        echo '<nav aria-label="Pagination">';
+        echo '<ul class="pagination justify-content-end mb-0">';
+        $qs = $_GET;
+        $mkLink = function($p) use ($qs) {
+            $qs['page'] = $p;
+            return '?'.http_build_query($qs);
+        };
+        
+        $prev = max(1, $page - 1);
+        $next = min($totalPages, $page + 1);
+        
+        echo '<li class="page-item'.($page<=1?' disabled':'').'"><a class="page-link" href="'.$mkLink($prev).'">Sebelumnya</a></li>';
+        
+        // Simple pagination logic
+        $startP = max(1, $page - 2);
+        $endP = min($totalPages, $page + 2);
+        for ($p = $startP; $p <= $endP; $p++) {
+            echo '<li class="page-item'.($p==$page?' active':'').'"><a class="page-link" href="'.$mkLink($p).'">'.$p.'</a></li>';
+        }
+        
+        echo '<li class="page-item'.($page>=$totalPages?' disabled':'').'"><a class="page-link" href="'.$mkLink($next).'">Berikutnya</a></li>';
+        echo '</ul>';
+        echo '</nav>';
+        echo '</div>';
+    }
+    
+    echo '</div>'; // card-body
+    echo '</div>'; // card
+
+    // Scripts
+    echo '<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>';
+    echo '<script>';
+    echo 'const ctx = document.getElementById("financeChart").getContext("2d");';
+    echo 'new Chart(ctx, {';
+    echo '    type: "bar",';
+    echo '    data: {';
+    echo '        labels: '.json_encode($chartLabels).',';
+    echo '        datasets: [{';
+    echo '            label: "Pemasukan (Komisi)",';
+    echo '            data: '.json_encode($chartIncome).',';
+    echo '            backgroundColor: "rgba(25, 135, 84, 0.6)",';
+    echo '            borderColor: "rgba(25, 135, 84, 1)",';
+    echo '            borderWidth: 1';
+    echo '        }, {';
+    echo '            label: "Pengeluaran (Potongan)",';
+    echo '            data: '.json_encode($chartExpense).',';
+    echo '            backgroundColor: "rgba(220, 53, 69, 0.6)",';
+    echo '            borderColor: "rgba(220, 53, 69, 1)",';
+    echo '            borderWidth: 1';
+    echo '        }]';
+    echo '    },';
+    echo '    options: { responsive: true, scales: { y: { beginAtZero: true } } }';
+    echo '});';
+    echo '</script>';
+
+    showfooter();
+    exit();
+}
+
+// ============================================================
+// LOGIC: LIST UTAMA (DAFTAR MEMBER)
+// ============================================================
+
 $sponsorNet = (int)db_var("SELECT COALESCE(SUM(`lap_masuk`)-SUM(`lap_keluar`),0) FROM `sa_laporan` WHERE `lap_code`=2");
 $contribNet = (int)db_var("SELECT COALESCE(SUM(`lap_masuk`)-SUM(`lap_keluar`),0) FROM `sa_laporan` WHERE `lap_code`=3");
-$reservedSponsor = (int)db_var("SELECT COALESCE(SUM(`amount`),0) FROM `epi_commission_payout` WHERE `type`='sponsor' AND `status` IN ('requested','processed','paid')");
-$reservedContrib = (int)db_var("SELECT COALESCE(SUM(`amount`),0) FROM `epi_commission_payout` WHERE `type`='contrib' AND `status` IN ('requested','processed','paid')");
+
+// New: Total Accumulated Commission (Card 1)
+$sponsorTotal = (int)db_var("SELECT COALESCE(SUM(`lap_masuk`),0) FROM `sa_laporan` WHERE `lap_code`=2");
+$contribTotal = (int)db_var("SELECT COALESCE(SUM(`lap_masuk`),0) FROM `sa_laporan` WHERE `lap_code`=3");
+
+// Fix: Reserved should only include pending requests, NOT paid ones (as paid ones are already deducted in ledger)
+$reservedSponsor = (int)db_var("SELECT COALESCE(SUM(`amount`),0) FROM `epi_commission_payout` WHERE `type`='sponsor' AND `status` IN ('requested','pending','processed')");
+$reservedContrib = (int)db_var("SELECT COALESCE(SUM(`amount`),0) FROM `epi_commission_payout` WHERE `type`='contrib' AND `status` IN ('requested','pending','processed')");
 $notReqSponsor = max(0, $sponsorNet - $reservedSponsor);
 $notReqContrib = max(0, $contribNet - $reservedContrib);
 $pendingSponsor = (int)db_var("SELECT COALESCE(SUM(`amount`),0) FROM `epi_commission_payout` WHERE `type`='sponsor' AND `status` IN ('requested','pending','processed')");
@@ -42,7 +366,8 @@ if (!in_array($export, array('csv','xlsx'), true)) { $export = ''; }
 $whereName = '';
 if ($q !== '') {
     $s = cek($q);
-    $whereName = " WHERE m.`mem_nama` LIKE '%".$s."%'";
+    // Modified to search by Name OR ID
+    $whereName = " WHERE (m.`mem_nama` LIKE '%".$s."%' OR m.`mem_id` = '".(int)$s."')";
 }
 
 $ledgerSponsor = "SELECT `lap_idsponsor` AS `mem_id`, COALESCE(SUM(`lap_masuk`)-SUM(`lap_keluar`),0) AS `balance_gross`, MAX(`lap_tanggal`) AS `last_ts` FROM `sa_laporan` WHERE `lap_code`=2 GROUP BY `lap_idsponsor`";
@@ -190,23 +515,6 @@ $qsBase = $qs;
 $startRow = ($totalRows > 0) ? ($offset + 1) : 0;
 $endRow = min($offset + $limit, $totalRows);
 
-echo '<style>'
-  .'.btn-apply{ display:inline-block; padding:.5rem .9rem; border:none; border-radius:.5rem; background:#D4AF37; color:#0B0B0B; text-decoration:none; font-weight:600; box-shadow:0 .3rem 0 #b18c2c, 0 .3rem .6rem rgba(0,0,0,.25); transform:translateY(0); transition:transform .1s ease, box-shadow .1s ease, filter .15s ease; }'
-  .'.btn-apply:hover{ filter:brightness(.97); }'
-  .'.btn-apply:active{ transform:translateY(.25rem); box-shadow:0 .05rem 0 #b18c2c, 0 .1rem .3rem rgba(0,0,0,.25); }'
-  .'.btn-apply:focus-visible{ outline:2px solid #0B0B0B; outline-offset:2px; }'
-  .'.btn-followup{ display:inline-flex; align-items:center; justify-content:center; padding:.35rem .6rem; border:none; border-radius:.5rem; background:#D4AF37; color:#0B0B0B; text-decoration:none; font-weight:600; font-size:.875rem; box-shadow:0 .2rem 0 #b18c2c, 0 .2rem .45rem rgba(0,0,0,.2); transform:translateY(0); transition:transform .1s ease, box-shadow .1s ease, filter .15s ease; white-space:nowrap; }'
-  .'.btn-followup:hover{ filter:brightness(.97); }'
-  .'.btn-followup:active{ transform:translateY(.2rem); box-shadow:0 .05rem 0 #b18c2c, 0 .1rem .3rem rgba(0,0,0,.2); }'
-  .'.btn-followup:focus-visible{ outline:2px solid #0B0B0B; outline-offset:2px; }'
-  .'.btn-followup.disabled, .btn-followup[aria-disabled="true"]{ opacity:.6; pointer-events:none; }'
-  .'.komisi-actionbar{ gap:10px; }'
-  .'.komisi-actionbar .btn-apply{ width:100%; text-align:center; }'
-  .'@media (min-width: 576px){ .komisi-actionbar .btn-apply{ width:auto; } }'
-  .'.export-indicator{ font-size:.85rem; padding:.2rem .5rem; border-radius:.35rem; background:#F8F8F8; color:#0B0B0B; border:1px solid #ddd; }'
-  .'.export-indicator.filtered{ background:#fff3cd; color:#664d03; border-color:#ffecb5; }'
-  .'</style>';
-
 echo '<div class="row g-3 mb-3 align-items-stretch">
   <div class="col-12 col-sm-6 col-lg-3">
     <div class="card shadow-sm h-100" style="border-left:4px solid #D4AF37;">
@@ -214,11 +522,11 @@ echo '<div class="row g-3 mb-3 align-items-stretch">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-2">
           <span class="badge bg-dark">Pereferal</span>
-          <span class="h6 mb-0">Rp '.number_format($sponsorNet,0,',','.').'</span>
+          <span class="h6 mb-0">Rp '.number_format($sponsorTotal,0,',','.').'</span>
         </div>
         <div class="d-flex justify-content-between align-items-center">
           <span class="badge bg-warning text-dark">Kontributor</span>
-          <span class="h6 mb-0">Rp '.number_format($contribNet,0,',','.').'</span>
+          <span class="h6 mb-0">Rp '.number_format($contribTotal,0,',','.').'</span>
         </div>
       </div>
     </div>
@@ -277,8 +585,8 @@ echo '<form class="card mb-3" method="get" action="">'
     .'<div class="card-body">'
       .'<div class="row g-2 align-items-end">'
         .'<div class="col-12 col-md-6">'
-          .'<label class="form-label">Cari Nama Member</label>'
-          .'<input type="text" class="form-control" name="q" value="'.htmlspecialchars($q, ENT_QUOTES).'" placeholder="Ketik nama member..." />'
+          .'<label class="form-label">Cari Nama atau ID Member</label>'
+          .'<input type="text" class="form-control" name="q" value="'.htmlspecialchars($q, ENT_QUOTES).'" placeholder="Ketik nama atau ID member..." />'
         .'</div>'
         .'<div class="col-12 col-md-6">'
           .'<label class="form-label">Jenis Komisi</label>'
@@ -298,16 +606,16 @@ echo '<form class="card mb-3" method="get" action="">'
     .'</div>'
   .'</form>';
 
-echo '<div class="table-responsive">'
-    .'<table class="table table-hover table-bordered align-middle">'
+echo '<div class="table-freeze-container">'
+    .'<table class="table table-hover table-bordered mb-0 align-middle">'
       .'<thead class="table-secondary">'
         .'<tr>'
-          .'<th>ID</th>'
+          .'<th class="sticky-col text-center">ID</th>'
           .'<th>Nama Member</th>'
-          .'<th class="text-end"><span class="badge bg-secondary">Belum Diajukan</span></th>'
-          .'<th class="text-end"><span class="badge bg-warning text-dark">Pending</span></th>'
-          .'<th class="text-end"><span class="badge bg-success">Dibayarkan</span></th>'
-          .'<th class="text-end">Total Komisi Diterima</th>'
+          .'<th><span class="badge bg-secondary">Belum Diajukan</span></th>'
+          .'<th><span class="badge bg-warning text-dark">Pending</span></th>'
+          .'<th><span class="badge bg-success">Dibayarkan</span></th>'
+          .'<th>Total Komisi Diterima</th>'
           .'<th>Jenis Komisi</th>'
           .'<th>Action</th>'
         .'</tr>'
@@ -336,16 +644,18 @@ if (count($rows) === 0) {
 
         $jenisBadge = ($jenisLabel === 'Kontributor') ? '<span class="badge bg-warning text-dark">Kontributor</span>' : '<span class="badge bg-dark">Pereferral</span>';
         echo '<tr>'
-            .'<td>'.(int)$memId.'</td>'
+            .'<td class="sticky-col text-center">'.(int)$memId.'</td>'
             .'<td>'.htmlspecialchars($nama, ENT_QUOTES).'</td>'
             .'<td class="text-end text-secondary">Rp '.number_format($belum, 0, ',', '.').'</td>'
             .'<td class="text-end text-warning">Rp '.number_format($pending, 0, ',', '.').'</td>'
             .'<td class="text-end text-success">Rp '.number_format($paid, 0, ',', '.').'</td>'
             .'<td class="text-end fw-bold">Rp '.number_format($total, 0, ',', '.').'</td>'
             .'<td>'.$jenisBadge.'</td>'
-            .'<td>'.($canFollow
-                ? ('<a class="btn-followup" href="'.htmlspecialchars($waUrl, ENT_QUOTES).'" target="_blank" rel="noopener" title="Follow up via WhatsApp" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Follow up via WhatsApp">Follow Up</a>')
-                : ('<span class="btn-followup disabled" aria-disabled="true" title="'.($waUrl===''?'Nomor WhatsApp belum tersedia':'Tidak ada komisi belum dicairkan').'" data-bs-toggle="tooltip" data-bs-placement="top">Follow Up</span>')
+            .'<td>'
+                .'<a href="?detil='.$memId.'" class="btn-detail" title="Lihat Rincian"><i class="fas fa-eye"></i> Detail</a>'
+                .($canFollow
+                ? ('<a class="btn-followup" href="'.htmlspecialchars($waUrl, ENT_QUOTES).'" target="_blank" rel="noopener" title="Follow up via WhatsApp" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Follow up via WhatsApp"><i class="fab fa-whatsapp"></i> Follow</a>')
+                : ('<span class="btn-followup disabled" aria-disabled="true" title="'.($waUrl===''?'Nomor WhatsApp belum tersedia':'Tidak ada komisi belum dicairkan').'" data-bs-toggle="tooltip" data-bs-placement="top"><i class="fab fa-whatsapp"></i> Follow</span>')
             ).'</td>'
             .'</tr>';
     }

@@ -263,9 +263,13 @@ showheader($head);
               $hasAccess = false;
               if (isset($datamember['mem_id'])) {
                 $hargaTampil = (isset($data['pro_harga_display']) && $data['pro_harga_display'] !== '' ? $data['pro_harga_display'] : $data['pro_harga']);
+                // Check Admin Bypass (Role >= 5)
+                $isAdminBypass = (isset($datamember['mem_role']) && (int)$datamember['mem_role'] >= 5);
+                
                 $hasAccess = (
+                  $isAdminBypass
                   // Akses gratis eksplisit
-                  (isset($data['pro_free_access']) && $data['pro_free_access'] == 1)
+                  || (isset($data['pro_free_access']) && $data['pro_free_access'] == 1)
                   // Order sudah lunas
                   || (db_var("SELECT COUNT(*) FROM `sa_order` WHERE `order_idproduk`=".(int)$data['page_id']." AND `order_idmember`=".(int)$datamember['mem_id']." AND (`order_status`=1 OR (`order_hargaunik`=0 AND `order_trx`='free'))") > 0)
                   // Harga tampil 0 (gratis setelah diskon)

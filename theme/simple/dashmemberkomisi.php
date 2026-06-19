@@ -153,6 +153,7 @@ if (isset($_GET['detil'])) {
 	}
 	
 } else {
+	$namaMember = db_var("SELECT `mem_nama` FROM `sa_member` WHERE `mem_id` = " . $iduser);
     echo '
     <style>
       .epi-card{border-radius:8px; padding:16px; box-shadow:0 2px 4px rgba(0,0,0,0.1); background:#fff;}
@@ -174,7 +175,7 @@ if (isset($_GET['detil'])) {
     <div class="row g-3 mb-3">
       <div class="col-md-4">
         <div class="epi-card h-100">
-          <div class="epi-label">💰 Saldo Siap Cair</div>
+          <div class="epi-label">💰 Saldo Siap Cair, '.htmlspecialchars($namaMember).'</div>
           <div class="epi-value text-success">'.('Rp '.number_format($saldoAvailableTotal)).'</div>
           <div class="small text-muted mb-3">Total saldo yang bisa di-withdraw saat ini</div>
           

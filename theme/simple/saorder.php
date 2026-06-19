@@ -694,19 +694,34 @@ if (isset($slug[2]) && !empty($slug[2])) :
     })(window,document,'script','dataLayer','GTM-<?= $gtmId; ?>');</script>
     <!-- End Google Tag Manager -->
     <?php endif; ?>
-    <style>
-      .site-logo{max-height:60px;height:auto;width:auto;transition:filter .2s ease}
-      @media (max-width:576px){.site-logo{max-height:48px}}
-      .site-logo:hover{filter:brightness(0.95)}
-    </style>
 </head>
 <body>
 	<header class="container py-3 text-center">
 		<?php 
-		  $homeurl = (isset($slug[1]) && $slug[1] == 'dashboard') ? ($weburl.'dashboard') : $weburl;
-		  $logoSrc = function_exists('epi_resolve_logo_src') ? epi_resolve_logo_src($weburl, isset($settings)?$settings:getsettings(), $logoweb ?? ($settings['logoweb'] ?? null)) : ($weburl.'img/simpleaff-logo.png');
+		  // Robust logo source resolution to avoid fatal when $logoweb is array or invalid
+		  $defaultLogo = $weburl.'img/simpleaff-logo.png';
+		  $logoSrc = $defaultLogo;
+		  if (isset($logoweb) && !empty($logoweb)) {
+		    if (is_string($logoweb)) {
+		      $logoSrc = $weburl.$logoweb;
+		    } elseif (is_array($logoweb)) {
+		      // Try common keys if settings stored as structured array
+		      if (isset($logoweb['url']) && is_string($logoweb['url']) && $logoweb['url'] !== '') {
+		        $logoSrc = (strpos($logoweb['url'], 'http') === 0) ? $logoweb['url'] : ($weburl.$logoweb['url']);
+		      } elseif (isset($logoweb['path']) && is_string($logoweb['path']) && $logoweb['path'] !== '') {
+		        $logoSrc = $weburl.$logoweb['path'];
+		      } elseif (isset($settings['logoweb']) && is_string($settings['logoweb']) && $settings['logoweb'] !== '') {
+		        // Fallback to settings string if available
+		        $logoSrc = $weburl.'upload/'.$settings['logoweb'];
+		      } else {
+		        $logoSrc = $defaultLogo; // final fallback
+		      }
+		    } else {
+		      $logoSrc = $defaultLogo;
+		    }
+		  }
+		  echo '<img src="'.htmlspecialchars((string)$logoSrc,ENT_QUOTES).'" alt="Logo" style="max-height:60px"/>';
 		?>
-		<a href="<?= $homeurl; ?>"><img src="<?= htmlspecialchars($logoSrc, ENT_QUOTES); ?>" alt="EPI Logo" class="site-logo"></a>
 	</header>
 	<?php if (!empty($gtmId)): ?>
 	<!-- Google Tag Manager (noscript) -->
@@ -1018,7 +1033,7 @@ if (isset($slug[2]) && !empty($slug[2])) :
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
       <script>
-    document.addEventListener('DOMContentLoaded', function(){
+    (function(){
       var applyBtn = document.getElementById('applyCoupon');
       var input = document.getElementById('promo_code');
       var base = '<?php echo htmlspecialchars((string)$visiturl, ENT_QUOTES); ?>';
@@ -1039,25 +1054,25 @@ if (isset($slug[2]) && !empty($slug[2])) :
       }
 
       // Disable "Order Sekarang" until a payment method is selected
-      var submitBtn = document.getElementById('formsubmit');
-      if (submitBtn) {
+      document.addEventListener('DOMContentLoaded', function(){
+        var submitBtn = document.getElementById('formsubmit');
+        if (!submitBtn) return;
         var methods = document.querySelectorAll('input[name="payment"]');
-        if (methods && methods.length > 0) {
-          var hasSelected = false;
-          try { hasSelected = Array.prototype.some.call(methods, function(m){ return !!m.checked; }); } catch(e){}
-          if (hasSelected) {
-            try { submitBtn.disabled = false; submitBtn.classList.remove('disabled'); submitBtn.removeAttribute('aria-disabled'); } catch(e){}
-          } else {
-            try { submitBtn.disabled = true; submitBtn.classList.add('disabled'); submitBtn.setAttribute('aria-disabled','true'); } catch(e){}
-          }
-          methods.forEach(function(r){
-            r.addEventListener('change', function(){
-              try { submitBtn.disabled = false; submitBtn.classList.remove('disabled'); submitBtn.removeAttribute('aria-disabled'); } catch(e){}
-            });
-          });
+        if (!methods || methods.length === 0) return;
+        var hasSelected = false;
+        try { hasSelected = Array.prototype.some.call(methods, function(m){ return !!m.checked; }); } catch(e){}
+        if (hasSelected) {
+          try { submitBtn.disabled = false; submitBtn.classList.remove('disabled'); submitBtn.removeAttribute('aria-disabled'); } catch(e){}
+        } else {
+          try { submitBtn.disabled = true; submitBtn.classList.add('disabled'); submitBtn.setAttribute('aria-disabled','true'); } catch(e){}
         }
-      }
-    });
+        methods.forEach(function(r){
+          r.addEventListener('change', function(){
+            try { submitBtn.disabled = false; submitBtn.classList.remove('disabled'); submitBtn.removeAttribute('aria-disabled'); } catch(e){}
+          });
+        });
+      });
+    })();
     </script>
 </body>
 </html>

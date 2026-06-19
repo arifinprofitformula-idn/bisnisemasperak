@@ -23,6 +23,59 @@ if (!$allow) { echo '<div class="alert alert-danger">Akses ditolak. Role Anda ti
 $head['pagetitle']='Pembayaran Komisi';
 showheader($head);
 
+// --- Global UI Styles & Scripts (Sticky Header, etc) ---
+echo '
+<style>
+	/* Container Table dengan Freeze Header & Column */
+	.table-freeze-container {
+		max-height: 75vh;
+		overflow: auto;
+		position: relative;
+		border: 1px solid #dee2e6;
+		border-radius: 0.375rem;
+		box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+		background-color: #fff;
+		scroll-behavior: smooth;
+	}
+	.table-freeze-container .table-bordered { border: 0; }
+	.table-freeze-container thead th {
+		position: sticky;
+		top: 0;
+		z-index: 20;
+		background-color: #e2e3e5;
+		color: #383d41;
+		box-shadow: inset 0 -2px 0 #adb5bd;
+		border-bottom: 0;
+		text-align: center;
+		vertical-align: middle;
+	}
+	.table-freeze-container tbody td.sticky-col {
+		position: sticky;
+		left: 0;
+		z-index: 10;
+		background-color: #fff;
+		border-right: 2px solid #dee2e6;
+		transition: background-color 0.15s ease-in-out;
+	}
+	.table-freeze-container tbody tr:hover td.sticky-col { background-color: #ececec; }
+	.table-freeze-container thead th.sticky-col {
+		left: 0;
+		z-index: 30;
+		background-color: #e2e3e5;
+		border-right: 2px solid #dee2e6;
+	}
+	.pagination-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 1rem; }
+	@media (max-width: 576px) { .pagination-container { justify-content: center; text-align: center; } }
+	.loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.7); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+</style>
+<div class="loading-overlay" id="loadingOverlay">
+	<div class="text-center">
+		<div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+		<div class="mt-2 fw-bold text-dark">Memuat data...</div>
+	</div>
+</div>
+';
+
 // Filter tipe dan status payout
 $tipe = isset($_GET['tipe']) && in_array($_GET['tipe'], array('sponsor','kontributor')) ? $_GET['tipe'] : 'sponsor';
 $status = isset($_GET['status']) && in_array($_GET['status'], array('pending','paid')) ? $_GET['status'] : 'pending';
@@ -32,50 +85,145 @@ $end   = (isset($_GET['end']) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $_GET['end'
 
  
 if (isset($_GET['detil']) && is_numeric($_GET['detil'])) {
-	$datasponsor = db_row("SELECT * FROM `sa_member` WHERE `mem_id`=".$_GET['detil']);
+	$id_detil = (int)$_GET['detil'];
+	$datasponsor = db_row("SELECT * FROM `sa_member` WHERE `mem_id`=".$id_detil);
 	echo '<h3>Data Komisi '.$datasponsor['mem_nama'].'</h3>';
+	
+	// --- Pagination Logic ---
+	$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+	if ($page < 1) $page = 1;
+	
+	$limit_options = [50, 100, 200, 300, 400, 500];
+	$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 50;
+	if (!in_array($limit, $limit_options)) $limit = 50;
+	
+	$offset = ($page - 1) * $limit;
+	
+	// Count Total
+	$total_rows = (int)db_var("SELECT COUNT(*) FROM `sa_laporan` WHERE `lap_idsponsor`=".$id_detil." AND `lap_code`=2");
+	$total_pages = ceil($total_rows / $limit);
+	
+	// Opening Balance Calculation
+	// Calculate sum of all previous transactions to set initial saldo for this page
+	$saldo = 0;
+	if ($offset > 0) {
+		// Use a subquery to sum the first N rows (ordered by ID ASC)
+		$saldo = (int)db_var("SELECT SUM(`lap_masuk`) - SUM(`lap_keluar`) FROM (SELECT `lap_masuk`, `lap_keluar` FROM `sa_laporan` WHERE `lap_idsponsor`=".$id_detil." AND `lap_code`=2 ORDER BY `lap_id` ASC LIMIT ".$offset.") AS tmp");
+	}
+	
+	// Fetch Data for Current Page
 	$data = db_select("SELECT * FROM `sa_laporan` 
 		LEFT JOIN `sa_member` ON `sa_member`.`mem_id` = `sa_laporan`.`lap_idmember`
-		WHERE `lap_idsponsor`=".$_GET['detil']." AND `lap_code`=2");
+		WHERE `lap_idsponsor`=".$id_detil." AND `lap_code`=2
+		ORDER BY `sa_laporan`.`lap_id` ASC
+		LIMIT $limit OFFSET $offset");
 	
+	// --- UI Styles & Scripts (Moved to top) ---
+
+	// --- Controls (Limit Selector) ---
+	echo '<div class="card mb-3 border-0 shadow-sm"><div class="card-body p-2">';
+	echo '<form method="get" class="d-flex align-items-center" onsubmit="document.getElementById(\'loadingOverlay\').style.display=\'flex\'">';
+	echo '<input type="hidden" name="detil" value="'.$id_detil.'">';
+	echo '<span class="me-2 text-muted">Tampilkan</span>';
+	echo '<select name="limit" class="form-select form-select-sm d-inline-block w-auto border-primary" onchange="document.getElementById(\'loadingOverlay\').style.display=\'flex\'; this.form.submit();">';
+	foreach ($limit_options as $opt) {
+		$sel = ($limit == $opt) ? 'selected' : '';
+		echo '<option value="'.$opt.'" '.$sel.'>'.$opt.'</option>';
+	}
+	echo '</select>';
+	echo '<span class="ms-2 text-muted">baris per halaman</span>';
+	echo '</form>';
+	echo '</div></div>';
+	
+	// --- Table ---
 	echo '
-	<div class="table-responsive">
-	<table class="table table-hover table-bordered">
+	<div class="table-freeze-container">
+	<table class="table table-hover table-bordered mb-0 align-middle">
 	<thead class="table-secondary">
 		<tr>
-			<th>Tanggal</th>
-			<th>Keterangan</th>			
-			<th class="text-end">Pemasukan</th>
-			<th class="text-end">Pengeluaran</th>
-			<th class="text-end">Saldo</th>
+			<th class="sticky-col text-center" width="60">No</th>
+			<th class="text-center" style="min-width: 110px;">Tanggal</th>
+			<th class="text-center" style="min-width: 250px;">Keterangan</th>			
+			<th class="text-center" style="min-width: 130px;">Pemasukan</th>
+			<th class="text-center" style="min-width: 130px;">Pengeluaran</th>
+			<th class="text-center" style="min-width: 130px;">Saldo</th>
 		</tr>
 	</thead>
 	<tbody>';
+	
 	if (count($data) > 0) {
-		$saldo = 0;
-		foreach ($data as $data) {
-			$saldo = $saldo + $data['lap_masuk'] - $data['lap_keluar'];
-			if ($data['lap_masuk'] > 0) {
-				$keterangan = $data['lap_keterangan'].' '.$data['mem_nama'].' Level: '.$data['lap_level'];
+		$no = $offset + 1;
+		foreach ($data as $row) {
+			$saldo = $saldo + $row['lap_masuk'] - $row['lap_keluar'];
+			if ($row['lap_masuk'] > 0) {
+				$keterangan = $row['lap_keterangan'].' '.$row['mem_nama'].' Level: '.$row['lap_level'];
 			} else {
-				$keterangan = $data['lap_keterangan'];
+				$keterangan = $row['lap_keterangan'];
 			}
 			echo '
 		<tr>
-			<td>'.$data['lap_tanggal'].'</td>
+			<td class="sticky-col text-center fw-bold text-secondary">'.$no.'</td>
+			<td>'.$row['lap_tanggal'].'</td>
 			<td>'.$keterangan.'</td>			
-			<td class="text-end">'.number_format($data['lap_masuk']).'</td>
-			<td class="text-end">'.number_format($data['lap_keluar']).'</td>
-			<td class="text-end">'.number_format($saldo).'</td>
-		</tr>
-			';
+			<td class="text-end text-success">'.($row['lap_masuk']>0 ? number_format($row['lap_masuk']) : '-').'</td>
+			<td class="text-end text-danger">'.($row['lap_keluar']>0 ? number_format($row['lap_keluar']) : '-').'</td>
+			<td class="text-end fw-bold">'.number_format($saldo).'</td>
+		</tr>';
+			$no++;
 		}
+	} else {
+		echo '<tr><td colspan="6" class="text-center p-5 text-muted"><i class="fas fa-inbox fa-3x mb-3"></i><br>Tidak ada data ditemukan pada halaman ini</td></tr>';
 	}
 	echo '
 	</tbody>
 	</table>
 	</div>
 	';
+	
+	// --- Footer Pagination ---
+	$start_entry = ($total_rows > 0) ? $offset + 1 : 0;
+	$end_entry = min($offset + $limit, $total_rows);
+	$base_url = '?detil='.$id_detil.'&limit='.$limit;
+	
+	echo '<div class="pagination-container">';
+	echo '<div class="text-muted small">Menampilkan <strong>'.$start_entry.'</strong> sampai <strong>'.$end_entry.'</strong> dari <strong>'.$total_rows.'</strong> data</div>';
+	
+	if ($total_pages > 1) {
+		echo '<nav><ul class="pagination pagination-sm mb-0 shadow-sm">';
+		
+		// Prev
+		$prev_disabled = ($page <= 1) ? 'disabled' : '';
+		$prev_url = $base_url.'&page='.($page-1);
+		echo '<li class="page-item '.$prev_disabled.'"><a class="page-link" href="'.$prev_url.'" onclick="document.getElementById(\'loadingOverlay\').style.display=\'flex\'"><i class="fas fa-chevron-left"></i></a></li>';
+		
+		// Pages (Smart Logic: 1, ..., p-1, p, p+1, ..., last)
+		$start_page = max(1, $page - 2);
+		$end_page = min($total_pages, $page + 2);
+		
+		if ($start_page > 1) {
+			 echo '<li class="page-item"><a class="page-link" href="'.$base_url.'&page=1" onclick="document.getElementById(\'loadingOverlay\').style.display=\'flex\'">1</a></li>';
+			 if ($start_page > 2) echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+		}
+		
+		for ($i = $start_page; $i <= $end_page; $i++) {
+			$active = ($i == $page) ? 'active' : '';
+			echo '<li class="page-item '.$active.'"><a class="page-link" href="'.$base_url.'&page='.$i.'" onclick="document.getElementById(\'loadingOverlay\').style.display=\'flex\'">'.$i.'</a></li>';
+		}
+		
+		if ($end_page < $total_pages) {
+			if ($end_page < $total_pages - 1) echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+			echo '<li class="page-item"><a class="page-link" href="'.$base_url.'&page='.$total_pages.'" onclick="document.getElementById(\'loadingOverlay\').style.display=\'flex\'">'.$total_pages.'</a></li>';
+		}
+		
+		// Next
+		$next_disabled = ($page >= $total_pages) ? 'disabled' : '';
+		$next_url = $base_url.'&page='.($page+1);
+		echo '<li class="page-item '.$next_disabled.'"><a class="page-link" href="'.$next_url.'" onclick="document.getElementById(\'loadingOverlay\').style.display=\'flex\'"><i class="fas fa-chevron-right"></i></a></li>';
+		
+		echo '</ul></nav>';
+	}
+	echo '</div>'; // End pagination-container
+	
 } else {
 
 	# Pencairan Komisi
@@ -231,6 +379,22 @@ if (isset($_GET['detil']) && is_numeric($_GET['detil'])) {
             if ($rows === false || !is_array($rows) || count($rows)===0) {
                 echo '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Error!</strong> Data batch pembayaran tidak ditemukan.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
             } else {
+                // VERIFIKASI INTEGRITAS DATA (Security Check)
+                // Pastikan setiap payout yang akan dibatalkan MEMILIKI record pengeluaran (expense) di sa_laporan.
+                // Jika tidak ada expense tapi kita refund, saldo user akan bertambah secara tidak sah.
+                $verifyOk = true;
+                foreach ($rows as $rVerify) {
+                    $qidCheck = (int)$rVerify['id'];
+                    // Cek by payout_id ATAU lap_reference (fallback compatibility)
+                    $chk = db_row("SELECT `lap_id` FROM `sa_laporan` WHERE (`payout_id`=$qidCheck OR `lap_reference`='PAYOUT-$qidCheck' OR `lap_reference` LIKE 'PAYOUT-$qidCheck-%') AND `lap_keluar` > 0");
+                    if (!$chk) {
+                        $verifyOk = false;
+                        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Security Alert!</strong> Integritas data tidak valid. Transaksi Payout #'.$qidCheck.' tidak memiliki data pengeluaran (expense) di buku besar. Pembatalan ditolak untuk mencegah anomali saldo.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+                        break;
+                    }
+                }
+                if (!$verifyOk) { return; }
+
                 $sumGross = 0; $sumTax = 0; $sumNet = 0; $pph = isset($settings['pph21_percent']) ? (float)$settings['pph21_percent'] : 0.0; if ($pph<0) { $pph=0.0; } if ($pph>100) { $pph=100.0; }
                 foreach ($rows as $r) {
                     $amt = (int)($r['gross_amount'] ?? $r['amount']);
@@ -513,8 +677,8 @@ if (isset($_GET['detil']) && is_numeric($_GET['detil'])) {
     </div>
     </form>
     ';
-    $thead = ($status==='paid') ? '<tr><th>Nama</th><th class="d-none d-sm-table-cell">Rekening</th><th class="text-end">Total Pending</th><th class="text-end">Total Paid</th><th>Aksi</th><th>Status Terakhir</th></tr>' : '<tr><th>Nama</th><th class="d-none d-sm-table-cell">Rekening</th><th class="text-end">Total Pending</th><th class="text-end">Total Paid</th><th>Proses Bayar</th><th>Status Terakhir</th></tr>';
-    echo '<div class="table-responsive"><table class="table table-hover table-bordered"><thead class="table-secondary">'.$thead.'</thead><tbody>';
+    $thead = ($status==='paid') ? '<tr><th class="text-center">Nama</th><th class="d-none d-sm-table-cell text-center">Rekening</th><th class="text-center">Total Pending</th><th class="text-center">Total Paid</th><th class="text-center">Aksi</th><th class="text-center">Status Terakhir</th></tr>' : '<tr><th class="text-center">Nama</th><th class="d-none d-sm-table-cell text-center">Rekening</th><th class="text-center">Total Pending</th><th class="text-center">Total Paid</th><th class="text-center">Proses Bayar</th><th class="text-center">Status Terakhir</th></tr>';
+    echo '<div class="table-freeze-container"><table class="table table-hover table-bordered mb-0 align-middle"><thead class="table-secondary">'.$thead.'</thead><tbody>';
     if (count($data) > 0) {
         foreach ($data as $row) {
             $datalain = extractdata(array('mem_datalain'=>$row['mem_datalain']));

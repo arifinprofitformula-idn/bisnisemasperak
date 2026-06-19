@@ -209,11 +209,6 @@ if (isset($_POST['username']) && filter_var($_POST['username'],FILTER_VALIDATE_E
         }
     </style>
     <style>
-      .site-logo{max-height:60px;height:auto;width:auto;transition:filter .2s ease}
-      @media (max-width:576px){.site-logo{max-height:48px}}
-      .site-logo:hover{filter:brightness(0.95)}
-    </style>
-    <style>
       /* PWA Loader & Prompt */
       .pwa-loader { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.85); z-index: 9999; backdrop-filter: blur(2px); }
       .pwa-loader img { width: clamp(56px, 18vw, 96px); height: auto; animation: floatLogo 1.8s ease-in-out infinite; border-radius: 12px; box-shadow: 0 8px 24px rgba(218,165,32,0.4); }
@@ -243,8 +238,7 @@ if (isset($_POST['username']) && filter_var($_POST['username'],FILTER_VALIDATE_E
 <body class="with-pwa-loader">
   <!-- PWA loading overlay (center) -->
   <div id="pwa-loader" class="pwa-loader" aria-hidden="true">
-    <?php $logoSrc = function_exists('epi_resolve_logo_src') ? epi_resolve_logo_src($weburl, isset($settings)?$settings:getsettings(), $settings['logoweb'] ?? null) : ($weburl.'img/simpleaff-logo.png'); ?>
-    <img src="<?= htmlspecialchars($logoSrc, ENT_QUOTES); ?>" alt="Loading" class="site-logo" />
+    <img src="/upload/logoweb.jpg" alt="Loading" />
   </div>
   <!-- Minimal, non-intrusive install prompt at header -->
   <div id="pwa-install-prompt" role="dialog" aria-labelledby="pwaPromptTitle" aria-modal="false">
@@ -265,10 +259,9 @@ if (isset($_POST['username']) && filter_var($_POST['username'],FILTER_VALIDATE_E
 	      <form action="" method="post">
 		      <div class="text-center mb-4">
 		          <!-- Logo EPI -->
-            <div class="mb-3">
-            	<?php $logoSrc = function_exists('epi_resolve_logo_src') ? epi_resolve_logo_src($weburl, isset($settings)?$settings:getsettings(), $settings['logoweb'] ?? null) : ($weburl.'img/simpleaff-logo.png'); ?>
-            	<img src="<?= htmlspecialchars($logoSrc, ENT_QUOTES); ?>" alt="EPI Logo" class="site-logo" style="margin-bottom:20px;">
-            </div>
+		      	<div class="mb-3">
+		      		<img src="<?= $weburl; ?>upload/logo-webb.jpg" alt="EPI Logo" class="img-fluid" style="max-height: 80px; margin-bottom: 20px;">
+		      	</div>
 		      	<h1 class="welcome-title">WELCOME BACK TO EPIC HUB!</h1>
                 <p class="welcome-subtitle">Login to your account</p>
 		      </div>
