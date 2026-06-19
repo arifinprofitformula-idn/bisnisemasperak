@@ -1,0 +1,73 @@
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+config.php
+config.local.php
+config.*.php
+!config.example.php
+custom_php.ini
+sacookie.cok
+
+# FTP/deployment state
+.ftp-deploy-sync-state.json
+.ftpquota
+
+# Runtime logs
+error_log
+**/error_log
+logs/*
+!logs/.gitkeep
+*.log
+
+# Runtime cache and generated files
+cache/*
+!cache/.gitkeep
+build/
+dist/
+tmp/
+temp/
+*.tmp
+*.cache
+
+# User uploads and private operational data
+upload/*
+!upload/index.php
+!upload/.gitkeep
+storage/*
+!storage/.gitignore
+!storage/.gitkeep
+
+# Archives and ad-hoc backups
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.bak
+*.backup
+*.backup.*
+*_backup
+*_backup.*
+*.old
+*.orig
+backup*.sql
+*.sql.gz
+*.sql.zip
+*.dump
+
+# Dependencies
+vendor/
+node_modules/
+
+# Test/build coverage artifacts
+coverage/
+.phpunit.result.cache
+
+# Editor, OS, and local tooling
+.vscode/
+.idea/
+.trae/
+.DS_Store
+Thumbs.db
+desktop.ini
